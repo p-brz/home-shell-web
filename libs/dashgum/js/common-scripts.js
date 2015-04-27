@@ -1,6 +1,12 @@
-/*---LEFT BAR ACCORDION----*/
-$(function() {
-    $('#nav-accordion').dcAccordion({
+
+DashgumSidebar = function () {
+    console.log("start dashgum script");
+
+    sidebar = document.getElementById("sidebar");
+    console.log("sidebar = " + sidebar);
+
+    /*---LEFT BAR ACCORDION----*/
+    $('.sidebar-menu').dcAccordion({
         eventType: 'click',
         autoClose: true,
         saveState: true,
@@ -11,16 +17,14 @@ $(function() {
 //        cookie: 'dcjq-accordion-1',
         classExpand: 'dcjq-current-parent'
     });
-});
 
-DashgumSidebar = function () {
-    console.log("start dashgum script");
 
-    sidebar = document.getElementById("sidebar");
-    console.log("sidebar = " + sidebar);
+
 //    sidebar dropdown menu auto scrolling
 
     jQuery('#sidebar .sub-menu > a').click(function () {
+        console.log("Sidebar click!");
+
         var o = ($(this).offset());
         diff = 250 - o.top;
         if(diff>0)
@@ -29,6 +33,9 @@ DashgumSidebar = function () {
             $("#sidebar").scrollTo("+="+Math.abs(diff),500);
     });
 
+    jQuery('#sidebar .sub-menu > a').each(function(){
+        console.log("sidebar item");
+    });
 
 
 //    sidebar toggle
