@@ -38,8 +38,16 @@
 </head>
 <body ng-app="homeshell">
 
-  <div ng-view></div>
-
+    <section id="container">
+        <!-- Includes header - single quotes is required!!-->
+        <div ng-include="'partials/header.html'"> </div>
+        <!-- Includes left sidebar - single quotes is required!!-->
+        <div ng-include="'partials/main-sidebar.html'"> </div>
+        <!-- Content -->
+        <div ng-view></div>
+        <!-- Includes footer - single quotes is required!!-->
+        <div ng-include="'partials/footer.html'"> </div>
+    </section>
   <!-- **********************************************************************************************************************************************************
       SCRIPTS
   *********************************************************************************************************************************************************** -->
