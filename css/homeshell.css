@@ -11,3 +11,14 @@
     display: table-cell;
     vertical-align: middle;
 }
+
+.appliance-box {
+    text-align: center;
+}
+.appliance-box > .appliance-box-extra{
+    display: none;
+}
+
+.appliance-box:hover > .appliance-box-extra{
+    display: inline-block;
+}
