@@ -1,20 +1,50 @@
 <div class="row mtbox">
     <div class="appliance-box col-md-2 col-sm-2 box0">
-
         <div class="appliance-box-main box1">
             <span class="li_bulb"></span>
             <h3>Lâmpada</h3>
             <div class="appliance-services">
-                <input type="checkbox" data-toggle="switch" />
+                <input type="checkbox" data-toggle="switch"
+                    data-size="small"
+                    data-label-width='0'/>
             </div>
         </div>
 
         <div class="appliance-box-extra appliance-services">
-            <input type="checkbox" data-toggle="switch" />
+            <div>
+                <input type="checkbox" data-toggle="switch"
+                    data-size="small"
+                    data-label-width='0'/>
+            </div>
         </div>
     </div>
 
-    
+
+    <div class="appliance-box col-md-2 col-sm-2 box0">
+        <div class="appliance-box-main box1">
+            <img class="appliance-icon" src="imgs/Door_64x64.png"></img>
+            <h3>Porta da Sala</h3>
+            <div class="appliance-services">
+                <div >
+                    <input type="checkbox"
+                        data-toggle="switch" data-size="small"
+                        data-on-text='Aberta' data-off-text="Fechada"
+                        data-label-width='0'
+                        />
+                </div>
+            </div>
+        </div>
+
+        <div class="appliance-box-extra appliance-services">
+            <input type="checkbox"
+                data-toggle="switch" data-size="small"
+                data-on-text='Trancada' data-off-text="Destrancada"
+                data-label-width='0'
+                />
+        </div>
+    </div>
+
+
     <div class="col-md-2 col-sm-2 box0">
         <div class="box1">
             <span class="li_cloud"></span>
@@ -117,6 +147,11 @@
 </div><!-- /row mt -->
 
 <script>
-    $('.switch')['bootstrapSwitch']();
-    DashgumFormComponents();
+    //$('.switch')['bootstrapSwitch']();
+
+    //DashgumFormComponents();
+
+    // Switch
+    $("[data-toggle='switch']").bootstrapSwitch();
+
 </script>
