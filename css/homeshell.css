@@ -12,8 +12,8 @@
     vertical-align: middle;
 }
 
-.appliance-box {
-    text-align: center;
+.index-categoty-name{
+    margin-bottom: -72px;
 }
 
 .appliance-box > .appliance-box-extra{
@@ -23,4 +23,12 @@
 .appliance-box:hover > .appliance-box-extra{
     /*Exibir extras de appliance durante hover*/
     display: inline-block;
+
+span.appliance-name{
+    font-size: 18px;
+}
+
+.appliance-buttom{
+    font-size: 25px;
+    margin-top: 8px;
 }

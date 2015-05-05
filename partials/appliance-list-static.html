@@ -1,0 +1,81 @@
+<div class="row mtbox">
+    <div class="appliance-box col-md-2 col-sm-2 box0">
+        <div class="appliance-box-main box1">
+            <img class="appliance-icon" src="imgs/bulb_64x64.png"></img>
+            <h3>Lâmpada</h3>
+            <div class="appliance-services">
+                <input type="checkbox" data-toggle="switch"
+                    data-size="small"
+                    data-label-width='0'/>
+            </div>
+        </div>
+
+        <div class="appliance-box-extra appliance-services">
+
+        </div>
+    </div>
+
+
+    <div class="appliance-box col-md-2 col-sm-2 box0">
+        <div class="appliance-box-main box1">
+            <img class="appliance-icon" src="imgs/Door_64x64.png"></img>
+            <h3>Porta da Sala</h3>
+            <div class="appliance-services">
+                <div >
+                    <input type="checkbox"
+                        data-toggle="switch" data-size="small"
+                        data-on-text='Aberta' data-off-text="Fechada"
+                        data-label-width='0'
+                        />
+                </div>
+            </div>
+        </div>
+
+        <div class="appliance-box-extra appliance-services">
+            <input type="checkbox"
+                data-toggle="switch" data-size="small"
+                data-on-text='Trancada' data-off-text="Destrancada"
+                data-label-width='0'
+                />
+        </div>
+    </div>
+
+    <div class="appliance-box col-md-2 col-sm-2 box0">
+        <div class="appliance-box-main box1">
+            <img class="appliance-icon" src="imgs/Snowflake_48x48.png"></img>
+            <h3>Ar-Condicionado do Quarto</h3>
+            <div class="appliance-services">
+                <label for="temperature-control">
+                    Temperatura
+                </label>
+                <input id="temperature-control" type="number" class="form-control temperature-control"
+                    placeholder="Temperature" value=23/>
+            </div>
+        </div>
+
+        <div class="appliance-box-extra appliance-services">
+
+        </div>
+    </div>
+</div>
+<!-- /row mt -->
+
+<div>
+    <div class="center-block" style="text-align:center;">
+        <span class="badge">
+            <i class="fa fa-ellipsis-h fa-2x"> </i>
+        </span>
+    </div>
+</div>
+
+<script>
+    // Switch
+    $("[data-toggle='switch']").bootstrapSwitch();
+
+    $(document).ready(function(){
+       $(".temperature-control").inputmask("99 Cº");
+       $("input[type='range']").each(function(){
+           console.log("found input range");
+       });
+    });
+</script>
