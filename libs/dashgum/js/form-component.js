@@ -1,4 +1,4 @@
-var Script = function () {
+var DashgumFormComponents = function () {
 
 
     //checkbox and radio btn
@@ -188,4 +188,5 @@ var Script = function () {
     $('#reportrange span').html(Date.today().add({ days: -29 }).toString('MMMM d, yyyy') + ' - ' + Date.today().toString('MMMM d, yyyy'));
 
 
-}();
+};
+DashgumFormComponents();
