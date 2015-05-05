@@ -70,7 +70,9 @@ app.controller('IndexAppliancesController', function($scope, $http) {
     $scope.getItems = function() {
         var req = {
             method: 'GET',
-            url: 'http://localhost:8080/appliances/',
+            // url: 'http://localhost:8080/appliances/',
+            // url: 'http://localhost/academico/hs-samples/sample_appliances_a.json',
+            url: 'http://localhost/academico/home-shell-web/samples/sample_appliances_a.json',
             headers: {
                 'Access-Control-Allow-Origin': '*'
             }

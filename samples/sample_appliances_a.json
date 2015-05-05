@@ -1,0 +1,136 @@
+{
+    "contents": {
+        "appliances": [
+            {
+                "id": 1,
+                "name": "Dinner Room Lamp",
+                "package": "com.homeshell.lamp",
+                "services": [
+                    {
+                        "id": 1,
+                        "name": "ligar",
+                        "params": []
+                    },
+                    {
+                        "id": 2,
+                        "name": "desligar",
+                        "params": []
+                    },
+                    {
+                        "id": 3,
+                        "name": "definir_brilho",
+                        "params": [
+                            {
+                                "id": 1,
+                                "name": "brilho"
+                            }
+                        ]
+                    }
+                ],
+                "status": {
+                    "brilho": 100,
+                    "ligada": 1
+                },
+                "type": "defaultlamp"
+            },
+            {
+                "id": 2,
+                "name": "Foo Bar's Lamp",
+                "package": "com.homeshell.lamp",
+                "services": [
+                    {
+                        "id": 4,
+                        "name": "ligar",
+                        "params": []
+                    },
+                    {
+                        "id": 5,
+                        "name": "desligar",
+                        "params": []
+                    },
+                    {
+                        "id": 6,
+                        "name": "definir_brilho",
+                        "params": [
+                            {
+                                "id": 2,
+                                "name": "brilho"
+                            }
+                        ]
+                    }
+                ],
+                "status": {
+                    "brilho": 100,
+                    "ligada": 0
+                },
+                "type": "lamp"
+            },
+            {
+                "id": 3,
+                "name": "Entrance Lamp",
+                "package": "com.homeshell.lamp",
+                "services": [
+                    {
+                        "id": 1,
+                        "name": "ligar",
+                        "params": []
+                    },
+                    {
+                        "id": 2,
+                        "name": "desligar",
+                        "params": []
+                    },
+                    {
+                        "id": 3,
+                        "name": "definir_brilho",
+                        "params": [
+                            {
+                                "id": 1,
+                                "name": "brilho"
+                            }
+                        ]
+                    }
+                ],
+                "status": {
+                    "brilho": 100,
+                    "ligada": 0
+                },
+                "type": "defaultlamp"
+            },
+            {
+                "id": 4,
+                "name": "Shelter Lamp",
+                "package": "com.homeshell.lamp",
+                "services": [
+                    {
+                        "id": 1,
+                        "name": "ligar",
+                        "params": []
+                    },
+                    {
+                        "id": 2,
+                        "name": "desligar",
+                        "params": []
+                    },
+                    {
+                        "id": 3,
+                        "name": "definir_brilho",
+                        "params": [
+                            {
+                                "id": 1,
+                                "name": "brilho"
+                            }
+                        ]
+                    }
+                ],
+                "status": {
+                    "brilho": 100,
+                    "ligada": 1
+                },
+                "type": "defaultlamp"
+            }
+        ]
+    },
+    "message": "OK",
+    "status": 200
+}
