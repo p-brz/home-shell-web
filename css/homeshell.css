@@ -15,10 +15,12 @@
 .appliance-box {
     text-align: center;
 }
+
 .appliance-box > .appliance-box-extra{
+    /*Ocultar extras de appliance por padrão*/
     display: none;
 }
-
 .appliance-box:hover > .appliance-box-extra{
+    /*Exibir extras de appliance durante hover*/
     display: inline-block;
 }
