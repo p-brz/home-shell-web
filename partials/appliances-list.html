@@ -1,38 +1,23 @@
-<div class="row mtbox">
-  <div class="col-md-2 col-sm-2 col-md-offset-1 box0">
-    <div class="box1">
-      <span class="li_bulb"></span>
-      <h3>Minha Lâmpada</h3>
+<h1>Appliances</h1>
+<div ng-controller="IndexAppliancesController" ng-init="getItems()">
+    <div class="row" ng-show="loading">
+        <div class="col-md-2 col-md-offset-3"><img class="img-responsive text-center" src="img/loading.gif" alt="Loading data" /></div>
     </div>
-    <p class="box-hide">933 People liked your page the last 24hs. Whoohoo!</p>
-  </div>
-  <div class="col-md-2 col-sm-2 box0">
-    <div class="box1">
-      <span class="li_cloud"></span>
-      <h3>+48</h3>
-    </div>
-    <p>48 New files were added in your cloud storage.</p>
-  </div>
-  <div class="col-md-2 col-sm-2 box0">
-    <div class="box1">
-      <span class="li_stack"></span>
-      <h3>23</h3>
-    </div>
-    <p>You have 23 unread messages in your inbox.</p>
-  </div>
-  <div class="col-md-2 col-sm-2 box0">
-    <div class="box1">
-      <span class="li_news"></span>
-      <h3>+10</h3>
-    </div>
-    <p>More than 10 news were added in your reader.</p>
-  </div>
-  <div class="col-md-2 col-sm-2 box0">
-    <div class="box1">
-      <span class="li_data"></span>
-      <h3>OK!</h3>
-    </div>
-    <p>Your server is working perfectly. Relax & enjoy.</p>
-  </div>
-
-</div><!-- /row mt -->
+    <div class="row mtbox">
+        <div class="col-md-2 col-sm-2 box0" ng-repeat="appliance in appliances" ng-class="{'col-md-offset-1': $first}">
+            <div class="box1">
+                <span class="li_bulb"></span>
+                <h3>{{appliancesById[appliance.id].name}}</h3>
+                <hr>
+                <span class="appliance-name text-center">{{appliancesById[appliance.id].status}}</span>
+            </div>
+            <p class="box-hide">
+                <a href="javascript:void(0);" class="text-center fa appliance-buttom"
+                ng-class="{true: 'fa-toggle-on', false: 'fa-toggle-off'}[appliancesById[appliance.id].realstatus == 1]"
+                ng-click="toggleStatus(appliancesById[appliance.id].realstatus, appliance.id)"
+                ></a>
+            </p>
+            <!-- <p class="box-hide">{{lampStatus(appliance.status.ligada)}}</p> -->
+        </div>
+    </div><!-- /row mt -->
+</div>

@@ -11,3 +11,16 @@
     display: table-cell;
     vertical-align: middle;
 }
+
+.index-categoty-name{
+    margin-bottom: -72px;
+}
+
+span.appliance-name{
+    font-size: 18px;
+}
+
+.appliance-buttom{
+    font-size: 25px;
+    margin-top: 8px;
+}
