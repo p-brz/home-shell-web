@@ -1,0 +1,19 @@
+{
+    "status" : "200",
+    "contents" : {
+        "groups" : [
+            {
+                "id"   : 1,
+                "name" : "Sala"
+            },
+            {
+                "id"   : 2,
+                "name" : "Quarto"
+            },
+            {
+                "id"   : 3,
+                "name" : "Cozinha"
+            }
+        ]
+    }
+}

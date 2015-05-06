@@ -23,6 +23,7 @@
 .appliance-box:hover > .appliance-box-extra{
     /*Exibir extras de appliance durante hover*/
     display: inline-block;
+}
 
 span.appliance-name{
     font-size: 18px;
@@ -31,4 +32,14 @@ span.appliance-name{
 .appliance-buttom{
     font-size: 25px;
     margin-top: 8px;
+}
+
+.notify-arrow{
+    border-color: transparent transparent #68dff0;
+    border-bottom-color: #FFFFFF !important;
+    border-top-color: #FFFFFF !important;
+}
+
+.mtbox{
+    margin-top : 0px;
 }

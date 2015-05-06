@@ -1,5 +1,6 @@
 app = angular.module('homeshell', [
-    'ngRoute', 'ScriptLazyLoad'
+    'ngRoute',
+    'frapontillo.bootstrap-switch' //angular-bootstrap-switch
 ]);
 
 app.config(['$routeProvider',
@@ -25,7 +26,8 @@ app.controller('RoomsController', function($scope, $http) {
     $scope.getItems = function() {
         var req = {
             method: 'GET',
-            url: 'http://localhost:8080/groups/',
+            //url: 'http://localhost:8080/groups/',
+            url: 'samples/sample_groups.json',
             headers: {
                 'Access-Control-Allow-Origin': '*'
             }
@@ -46,9 +48,12 @@ app.controller('RoomsController', function($scope, $http) {
 });
 
 app.controller('IndexAppliancesController', function($scope, $http) {
+    $scope.log = function(msg){console.log(msg);};
+
     $scope.appliances = [];
     $scope.loading = true;
     $scope.appliancesById = [];
+
 
     $scope.processAppliances = function(){
         var applianceCount = $scope.appliances.length;
@@ -60,9 +65,11 @@ app.controller('IndexAppliancesController', function($scope, $http) {
             $scope.appliancesById[applianceId] = {
                 name: appliance.name,
                 realstatus: appliance.status.ligada,
-                status: $scope.lampStatus(appliance.status.ligada)
+                status: $scope.lampStatus(appliance.status.ligada),
+                viewStatus : appliance.status.ligada == 1
             };
         }
+
         console.log(JSON.stringify($scope.appliancesById));
         console.log('Great! Loaded ' + $scope.appliancesById.length  + ' appliances');
     }
@@ -72,7 +79,7 @@ app.controller('IndexAppliancesController', function($scope, $http) {
             method: 'GET',
             // url: 'http://localhost:8080/appliances/',
             // url: 'http://localhost/academico/hs-samples/sample_appliances_a.json',
-            url: 'http://localhost/academico/home-shell-web/samples/sample_appliances_a.json',
+            url: 'samples/sample_appliances_a.json',
             headers: {
                 'Access-Control-Allow-Origin': '*'
             }
@@ -108,6 +115,7 @@ app.controller('IndexAppliancesController', function($scope, $http) {
 
     $scope.toggleStatus = function(status, lampId){
         console.log('ToggleStatus: ' + status);
+
         var oppositeService = '';
         if(status == 1){
             oppositeService = 'desligar';
@@ -134,6 +142,8 @@ app.controller('IndexAppliancesController', function($scope, $http) {
         .error(function(data, status) {
             console.log(status);
             alert("Could not update appliance...");
+            realStatus = $scope.appliancesById[lampId].realstatus;
+            $scope.appliancesById[lampId].viewStatus = (realStatus == 1);
         });
     }
 });

@@ -128,6 +128,50 @@
                     "ligada": 1
                 },
                 "type": "defaultlamp"
+            },
+            {
+                "id": 5,
+                "name": "Kitchen Lamp 1",
+                "package": "com.homeshell.lamp",
+                "services": [
+                    {
+                        "id": 1,
+                        "name": "ligar",
+                        "params": []
+                    },
+                    {
+                        "id": 2,
+                        "name": "desligar",
+                        "params": []
+                    }
+                ],
+                "status": {
+                    "brilho": 100,
+                    "ligada": 1
+                },
+                "type": "defaultlamp"
+            },
+            {
+                "id": 6,
+                "name": "Kitchen Lamp 2",
+                "package": "com.homeshell.lamp",
+                "services": [
+                    {
+                        "id": 1,
+                        "name": "ligar",
+                        "params": []
+                    },
+                    {
+                        "id": 2,
+                        "name": "desligar",
+                        "params": []
+                    }
+                ],
+                "status": {
+                    "brilho": 100,
+                    "ligada": 1
+                },
+                "type": "defaultlamp"
             }
         ]
     },

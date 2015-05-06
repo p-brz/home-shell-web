@@ -3,24 +3,35 @@
   Appliances
 </h1>
 <div ng-controller="IndexAppliancesController" ng-init="getItems()">
-    <div class="row" ng-show="loading">
-        <div class="col-md-2 col-md-offset-3"><img class="img-responsive text-center" src="img/loading.gif" alt="Loading data" /></div>
+    <div class="row" ng-if="loading">
+        <div class="col-md-2 col-md-offset-3">
+            <img class="img-responsive text-center" src="img/loading.gif" alt="Loading data" />
+        </div>
     </div>
     <div class="row mtbox">
-        <div class="col-md-2 col-sm-2 box0" ng-repeat="appliance in appliances" ng-class="{'col-md-offset-1': $first}">
-            <div class="box1">
+        <div id="{{appliancesById[appliance.id].name}}"
+            class="appliance-box col-md-2 col-sm-2 box0"
+            ng-repeat="appliance in appliances">
+
+            <div class="appliance-box-main box1">
                 <span class="li_bulb"></span>
                 <h3>{{appliancesById[appliance.id].name}}</h3>
-                <hr>
-                <span class="appliance-name text-center">{{appliancesById[appliance.id].status}}</span>
+                <div class="appliance-services">
+                    <input
+                      bs-switch
+                      type="checkbox"
+                      switch-size="small"
+                      switch-label-width="0"
+
+                      ng-model="appliancesById[appliance.id].viewStatus"
+                      ng-change="toggleStatus(appliancesById[appliance.id].viewStatus ? 1 : 0, appliance.id);"
+                      >
+                </div>
             </div>
-            <p class="box-hide">
-                <a href="javascript:void(0);" class="text-center fa appliance-buttom"
-                ng-class="{true: 'fa-toggle-on', false: 'fa-toggle-off'}[appliancesById[appliance.id].realstatus == 1]"
-                ng-click="toggleStatus(appliancesById[appliance.id].realstatus, appliance.id)"
-                ></a>
-            </p>
-            <!-- <p class="box-hide">{{lampStatus(appliance.status.ligada)}}</p> -->
+
+            <div class="appliance-box-extra appliance-services">
+
+            </div>
         </div>
     </div><!-- /row mt -->
 </div>
