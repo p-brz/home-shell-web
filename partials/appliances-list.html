@@ -14,6 +14,12 @@
             ng-repeat="appliance in appliances">
 
             <div class="appliance-box-main box1">
+                <div class="row pull-right">
+                  <button type="button" class="btn overflow-button">
+                    <i class="fa fa-ellipsis-v fa-2x"></i>
+                  </button>
+                </div>
+
                 <span class="li_bulb"></span>
                 <h3>{{appliancesById[appliance.id].name}}</h3>
                 <div class="appliance-services">

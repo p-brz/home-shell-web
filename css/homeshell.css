@@ -29,9 +29,8 @@ span.appliance-name{
     font-size: 18px;
 }
 
-.appliance-buttom{
-    font-size: 25px;
-    margin-top: 8px;
+.overflow-button{
+  background-color:inherit;
 }
 
 .notify-arrow{
