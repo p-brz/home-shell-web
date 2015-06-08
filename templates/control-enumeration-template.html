@@ -1,0 +1,7 @@
+<select class="selectpicker"
+        ng-model="appliance.appliance_status[control['bind-status']]"
+        selectpicker-ng>
+  <option value="{{value.id}}" ng-repeat="value in control.params.values">
+    {{value.label}}
+  </option>
+</select>

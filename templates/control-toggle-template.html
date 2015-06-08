@@ -1,0 +1,14 @@
+<input
+  bs-switch
+  id="toggle-power"
+  type="checkbox"
+  switch-size="small"
+  switch-label-width="0"
+  switch-on-text="{{ control.params['on-label'] }}"
+  switch-off-text="{{ control.params['off-label'] }}"
+  ng-model="appliance.appliance_status[control['bind-status']]",
+  ng-true-value="true",
+  ng-false-value="false",
+  ng-change="console.log(appliance);"
+  >
+  <!-- ng-change="toggleStatus(appliancesById[appliance.id].viewStatus ? 1 : 0, appliance.id);" !-->

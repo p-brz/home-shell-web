@@ -1,6 +1,6 @@
 {
   "schemes" : {
-    "com.homeshell.defaultlamp" : {
+    "com.homeshell.lamp.defaultlamp" : {
         "icon" : "bulb_64x64.png",
         "controls" : [
             {
@@ -41,6 +41,174 @@
                     "params": [ "brilho" ]
                   }
               }
+            }
+        ]
+    },
+    "com.homeshell.defaultdoor" : {
+        "icon" : "Door_64x64.png",
+        "controls" : [
+            {
+              "id" : "open",
+              "label" : "Abrir/Fechar",
+              "type" : "toggle",
+              "bind-status" : "aberta",
+              "params" : {
+                  "on-label" : "Aberta",
+                  "off-label" : "Fechada"
+              },
+              "event-callbacks" : {
+                  "on" : {
+                    "method" : "POST",
+                    "url" : "/services/abrir"
+                  },
+                  "off" : {
+                    "method" : "POST",
+                    "url" : "/services/fechar"
+                  }
+              }
+            },
+            {
+              "id" : "lock",
+              "label" : "Trancar/Destrancar",
+              "type" : "toggle",
+              "bind-status" : "trancada",
+              "params" : {
+                  "on-label" : "Trancada",
+                  "off-label" : "Destrancada"
+              },
+              "event-callbacks" : {
+                  "on" : {
+                    "method" : "POST",
+                    "url" : "/services/trancar"
+                  },
+                  "off" : {
+                    "method" : "POST",
+                    "url" : "/services/destrancar"
+                  }
+              }
+            }
+        ]
+    },
+    "com.homeshell.fan" : {
+        "icon" : "cpu_fan_64x64.png",
+        "controls" : [
+            {
+                "id" : "velocity",
+                "label": "Velocidade",
+                "type" : "range",
+                "bind-status" : "velocity",
+                "params" : {
+                    "min" : "0",
+                    "max" : "3",
+                    "range-type": "integer",
+                    "interval" : 1
+                },
+                "event-callbacks" : {
+                    "*" : {
+                      "method" : "POST",
+                      "url" : "/services/change-velocity",
+                      "params": [ "velocity" ]
+                    }
+                }
+            }
+        ]
+    },
+    "com.homeshell.cooler" : {
+        "icon" : "Snowflake_48x48.png",
+        "controls" : [
+            {
+                "id" : "temperature",
+                "label": "Temperatura",
+                "type" : "digit",
+                "bind-status" : "temperature",
+                "params" : {
+                    "min" : "10",
+                    "max" : "32"
+                },
+                "event-callbacks" : {
+                    "*" : {
+                      "method" : "POST",
+                      "url" : "/services/change-temperature",
+                      "params": [ "temperature" ]
+                    }
+                }
+            },
+            {
+                "id" : "mode",
+                "label": "Modo de Refrigeração",
+                "type" : "enumeration",
+                "bind-status" : "mode",
+                "params" : {
+                    "values" : [
+                        {"id" : "cool", "label" : "Resfriar"},
+                        {"id" : "dry" , "label" : "Desumidificar"},
+                        {"id" : "fan" , "label" : "Ventilar"},
+                        {"id" : "heat", "label" : "Aquecer"}
+                    ]
+                },
+                "event-callbacks" : {
+                    "*" : {
+                      "method" : "POST",
+                      "url" : "/services/change-mode",
+                      "params": [ "mode" ]
+                    }
+                }
+            }
+        ]
+    },
+    "com.homeshell.defaulttv" : {
+        "icon" : "tv-retro_64x64.png",
+        "controls" : [
+            {
+                "id" : "channel",
+                "label": "Canal",
+                "type" : "digit",
+                "bind-status" : "channel",
+                "params" : {
+                    "min" : "1",
+                    "max" : "500"
+                },
+                "event-callbacks" : {
+                    "*" : {
+                      "method" : "POST",
+                      "url" : "/services/change-channel",
+                      "params": [ "channel" ]
+                    }
+                }
+            },
+            {
+                "id" : "volume",
+                "label": "Volume",
+                "type" : "range",
+                "bind-status" : "volume",
+                "params" : {
+                    "min" : "0",
+                    "max" : "100",
+                    "range-type": "integer",
+                    "interval" : 1
+                },
+                "event-callbacks" : {
+                    "*" : {
+                      "method" : "POST",
+                      "url" : "/services/change-volume",
+                      "params": [ "volume" ]
+                    }
+                }
+            },
+            {
+                "id" : "mute",
+                "label": "Alternar Mudo",
+                "type" : "action",
+                "params" : {
+                    "label" : "mute"
+                },
+                "event-callbacks" : {
+                    "*" : {
+                      "method" : "POST",
+                      "url" : "/services/mute",
+                      "params": []
+                    }
+                }
             }
         ]
     }

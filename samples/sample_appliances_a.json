@@ -4,7 +4,7 @@
             {
                 "id": 1,
                 "name": "Dinner Room Lamp",
-                "package": "com.homeshell",
+                "package": "com.homeshell.lamp",
                 "services": [
                     {
                         "id": 1,
@@ -35,39 +35,39 @@
             },
             {
                 "id": 2,
-                "name": "Foo Bar's Lamp",
+                "name": "Porta da sala",
                 "package": "com.homeshell",
+                "type": "defaultdoor",
                 "services": [
                     {
+                        "id": 1,
+                        "name": "abrir",
+                        "params": []
+                    },
+                    {
+                        "id": 2,
+                        "name": "fechar",
+                        "params": []
+                    },
+                    {
+                        "id": 3,
+                        "name": "trancar",
+                        "params": []
+                    },
+                    {
                         "id": 4,
-                        "name": "ligar",
+                        "name": "destrancar",
                         "params": []
-                    },
-                    {
-                        "id": 5,
-                        "name": "desligar",
-                        "params": []
-                    },
-                    {
-                        "id": 6,
-                        "name": "definir_brilho",
-                        "params": [
-                            {
-                                "id": 2,
-                                "name": "brilho"
-                            }
-                        ]
                     }
                 ],
                 "status": {
-                    "brilho": 100,
-                    "ligada": 0
-                },
-                "type": "defaultlamp"
+                    "aberta": false,
+                    "trancada": false
+                }
             },
             {
                 "id": 3,
-                "name": "Entrance Lamp",
+                "name": "Televisão",
                 "package": "com.homeshell",
                 "services": [
                     {
@@ -82,20 +82,36 @@
                     },
                     {
                         "id": 3,
-                        "name": "definir_brilho",
+                        "name": "change-channel",
                         "params": [
                             {
                                 "id": 1,
-                                "name": "brilho"
+                                "name": "channel"
                             }
                         ]
+                    },
+                    {
+                        "id": 4,
+                        "name": "change-volume",
+                        "params": [
+                            {
+                                "id": 1,
+                                "name": "volume"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 5,
+                        "name": "mute",
+                        "params": []
                     }
                 ],
                 "status": {
-                    "brilho": 100,
-                    "ligada": 0
+                    "ligada": 0,
+                    "channel": 10,
+                    "volume": 50
                 },
-                "type": "defaultlamp"
+                "type": "defaulttv"
             },
             {
                 "id": 4,
@@ -131,47 +147,41 @@
             },
             {
                 "id": 5,
-                "name": "Kitchen Lamp 1",
-                "package": "com.homeshell.lamp",
+                "name": "Ar-Condicionado do quarto",
+                "package": "com.homeshell",
+                "type": "cooler",
                 "services": [
                     {
                         "id": 1,
-                        "name": "ligar",
-                        "params": []
+                        "name": "change-temperature",
+                        "params": ["temperature"]
                     },
                     {
                         "id": 2,
-                        "name": "desligar",
-                        "params": []
+                        "name": "change-mode",
+                        "params": ["mode"]
                     }
                 ],
                 "status": {
-                    "brilho": 100,
-                    "ligada": 1
-                },
-                "type": "defaultlamp"
+                    "temperature": 23,
+                    "mode": "cool"
+                }
             },
             {
                 "id": 6,
-                "name": "Kitchen Lamp 2",
-                "package": "com.homeshell.lamp",
+                "name": "Ventilador da sala.",
+                "package": "com.homeshell",
+                "type": "fan",
                 "services": [
                     {
                         "id": 1,
-                        "name": "ligar",
-                        "params": []
-                    },
-                    {
-                        "id": 2,
-                        "name": "desligar",
-                        "params": []
+                        "name": "change-velocity",
+                        "params": ["velocity"]
                     }
                 ],
                 "status": {
-                    "brilho": 100,
-                    "ligada": 1
-                },
-                "type": "defaultlamp"
+                    "velocity": 1
+                }
             }
         ]
     },

@@ -46,3 +46,7 @@ span.appliance-name{
 .appliance-detail-main{
     border-right : 1px solid;
 }
+
+.break-word{
+    word-wrap: break-word;
+}

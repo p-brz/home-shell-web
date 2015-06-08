@@ -72,9 +72,12 @@ app.controller('IndexAppliancesController', function($scope, $http) {
             console.log(appliance.status.ligada);
             $scope.appliancesById[applianceId] = {
                 name: appliance.name,
+                appliance_status : appliance.status,
                 realstatus: appliance.status.ligada,
                 status: $scope.lampStatus(appliance.status.ligada),
-                viewStatus : appliance.status.ligada == 1
+                viewStatus : appliance.status.ligada == 1,
+                type : appliance.type,
+                package : appliance.package
             };
         }
 
@@ -120,8 +123,10 @@ app.controller('IndexAppliancesController', function($scope, $http) {
 
         $http(req)
         .success(function(data, status) {
-            console.log('GOT schemes');
             $scope.uiSchemes = data.schemes;
+            for(name in $scope.uiSchemes){
+              console.log(name);
+            }
         })
         .error(function(data, status) {
             console.log("Failed to get schemes", status);
@@ -190,56 +195,72 @@ app.controller('IndexAppliancesController', function($scope, $http) {
         return JSON.stringify(object);
     }
     $scope.setCurrentAppliance = function(applianceId){
-        console.log("show");
         $scope.currentAppliance = $scope.appliancesById[applianceId];
-        console.log("end show. Appliance id: ", applianceId);
     }
-});
-
-//exemplo
-app.directive('childDirective', function ($http, $templateCache, $compile, $parse) {
-return {
-    restrict: 'E',
-    scope: [],
-    compile: function (iElement, iAttrs, transclude) {
-        iElement.append('child directive<br />');
-    }
-}
 });
 
 app.directive('applianceDetail', [function ($compile) {
    return {
      restrict: 'E',
     scope: {
-      appliance: '=appliance'
+      appliance: '=appliance',
+      scheme: '='
     },
     templateUrl : 'templates/appliance-detail-template.html'
    };
  }]);
 
-app.directive('applianceControl', [function ($compile) {
-   return {
-     restrict: 'E',
-     //link:function(scope, element, attrs) {
-    //   var tag = '<input bs-switch type="checkbox" switch-size="small" switch-label-width="0"'
-    //     + 'ng-model="appliancesById[appliance.id].viewStatus"'
-    //     + 'ng-change="toggleStatus(appliancesById[appliance.id].viewStatus ? 1 : 0, appliance.id);"'
-    //     + '>'
-    //   element.append(tag);
-    //   $compile(tag)(scope);
-    // }
-    scope: {
-      appliance: '=appliance'
-    },
-    template : function(element, attrs){
-      return '<input bs-switch type="checkbox" ng-model="appliance.viewStatus"/>';
+app.directive('applianceControl', function ($compile,  $templateRequest) {
+    this.templates = {
+      "toggle"      : "control-toggle-template.html",
+      "range"       : "control-range-template.html",
+      "enumeration" : "control-enumeration-template.html",
+      "digit"       : "control-digit-template.html",
+      "action"      : "control-action-template.html",
+    };
+
+    this.getTemplateUrlForControl = function(controlType){
+        if(templates[controlType]){
+          return "templates/" + templates[controlType];
+        }
+        return null;
     }
-    //compile: function (element, attrs) {
-    //    var x = '<input bs-switch ng-model="">';
-    //    element.append(x);
-    //}
-    //, link: function(scope, element, attrs, controllers) {
-    //  console.log("link, scope: ", scope, "\n Element: ", element );
-    //},
+
+    return {
+        restrict: 'E',
+        scope: {
+          appliance: '=',
+          control: '='
+        },
+        link: function(scope, element){
+            controlType = scope.control.type;
+            var templateUrl = getTemplateUrlForControl(controlType);
+            if(!templateUrl){
+                console.log("Could not render control of type '" + controlType + "'");
+                return;
+            }
+            $templateRequest(templateUrl).then(function(template) {
+               // template is the HTML template as a string
+               //Modifica element para que seu conteúdo seja o de template, então
+               //compila seu conteúdo aplicando o escopo atual
+               $compile(element.html(template).contents())(scope);
+            }, function() {
+               // An error has occurred here
+               console.log("failed to load template: ", templateUrl);
+            });
+        }
    };
- }]);
+ });
+
+ app.directive('selectpickerNg', function ($timeout) {
+ return {
+     restrict: 'A',
+     link: function(scope, element, attrs){
+       //Timeout espera até elemento estar renderizado (http://stackoverflow.com/a/22541080)
+        $timeout(function(){
+          //Ativa selectpicker neste elemento
+          $(element).selectpicker()
+        });
+     }
+ }
+ });
