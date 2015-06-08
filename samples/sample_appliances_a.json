@@ -4,7 +4,7 @@
             {
                 "id": 1,
                 "name": "Dinner Room Lamp",
-                "package": "com.homeshell.lamp",
+                "package": "com.homeshell",
                 "services": [
                     {
                         "id": 1,
@@ -36,7 +36,7 @@
             {
                 "id": 2,
                 "name": "Foo Bar's Lamp",
-                "package": "com.homeshell.lamp",
+                "package": "com.homeshell",
                 "services": [
                     {
                         "id": 4,
@@ -63,12 +63,12 @@
                     "brilho": 100,
                     "ligada": 0
                 },
-                "type": "lamp"
+                "type": "defaultlamp"
             },
             {
                 "id": 3,
                 "name": "Entrance Lamp",
-                "package": "com.homeshell.lamp",
+                "package": "com.homeshell",
                 "services": [
                     {
                         "id": 1,

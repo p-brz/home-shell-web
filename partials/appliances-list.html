@@ -1,25 +1,61 @@
+<style>
+.vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 100%;
+    pointer-events:none; /* This makes sure that we can still click outside of the modal to close it */
+}
+.vertical-align-center {
+    /* To center vertically */
+    display: table-cell;
+    vertical-align: middle;
+    pointer-events:none;
+}
+.vertical-align-center .modal-content {
+    /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+    width:inherit;
+    height:inherit;
+    margin-top: -15%;
+    /* To center horizontally */
+    margin-left: auto;
+    margin-right: auto;
+    pointer-events: all;
+}
+
+</style>
+
 <h1>
   <i class="fa fa-cubes"></i>
   Appliances
 </h1>
-<div ng-controller="IndexAppliancesController" ng-init="getItems()">
+
+
+
+<div ng-controller="IndexAppliancesController as appliancesControl" ng-init="setup()">
     <div class="row" ng-if="loading">
         <div class="col-md-2 col-md-offset-3">
             <img class="img-responsive text-center" src="img/loading.gif" alt="Loading data" />
         </div>
     </div>
+
     <div class="row mtbox">
         <div id="{{appliancesById[appliance.id].name}}"
             class="appliance-box col-md-2 col-sm-2 box0"
             ng-repeat="appliance in appliances">
 
             <div class="appliance-box-main box1">
+                <!-- Botão de overflow !-->
                 <div class="row pull-right">
-                  <button type="button" class="btn overflow-button">
+                  <button type="button" class="btn overflow-button"
+                    data-toggle="modal" data-target="#myModal"
+                    ng-click="setCurrentAppliance(appliance.id);"
+                    data-appliance-id="{{appliance.id}}"
+                    data-appliance={{jsonStringify(appliance)}}>
                     <i class="fa fa-ellipsis-v fa-2x"></i>
                   </button>
                 </div>
 
+                <!-- Ícone da appliance !-->
                 <span class="li_bulb"></span>
                 <h3>{{appliancesById[appliance.id].name}}</h3>
                 <div class="appliance-services">
@@ -40,4 +76,33 @@
             </div>
         </div>
     </div><!-- /row mt -->
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="vertical-alignment-helper">
+            <div class="modal-dialog vertical-align-center">
+                <div class="modal-content" ng-if="currentAppliance">
+                    <div class="modal-header clearfix">
+                        <button type="button" class="close" data-dismiss="modal">
+                          <span aria-hidden="true">&times;</span>
+                          <span class="sr-only">Close</span>
+                        </button>
+                        <!--
+                        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                        !-->
+                    </div>
+                    <div class="modal-body">
+                      <appliance-detail appliance="currentAppliance"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

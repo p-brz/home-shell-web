@@ -42,3 +42,7 @@ span.appliance-name{
 .mtbox{
     margin-top : 0px;
 }
+
+.appliance-detail-main{
+    border-right : 1px solid;
+}

@@ -12,7 +12,7 @@ Premium: http://www.gridgum.com
 /* BASIC THEME CONFIGURATION */
 body {
     color: #797979;
-	background: #f2f2f2;
+	  background: #f2f2f2;
     font-family: 'Ruda', sans-serif;
     padding: 0px !important;
     margin: 0px !important;
@@ -43,11 +43,11 @@ a, a:hover, a:focus {
 }
 
 /* Bootstrap Modifications */
-.modal-header {
+.dashgum-modal .modal-header {
 	background: #68dff0;
 }
 
-.modal-title {
+.dashgum-modal .modal-title {
 	color: white;
 }
 

@@ -1,0 +1,48 @@
+{
+  "schemes" : {
+    "com.homeshell.defaultlamp" : {
+        "icon" : "bulb_64x64.png",
+        "controls" : [
+            {
+              "id" : "power",
+              "label" : "ligar/desligar",
+              "type" : "toggle",
+              "bind-status" : "ligada",
+              "params" : {
+                  "on-label" : "On",
+                  "off-label" : "Off"
+              },
+              "event-callbacks" : {
+                  "on" : {
+                    "method" : "POST",
+                    "url" : "/services/ligar"
+                  },
+                  "off" : {
+                    "method" : "POST",
+                    "url" : "/services/desligar"
+                  }
+              }
+            },
+            {
+              "id" : "bright",
+              "label" : "brilho",
+              "type" : "range",
+              "bind-status" : "brilho",
+              "params" : {
+                  "min" : "0",
+                  "max" : "100",
+                  "range-type": "integer",
+                  "interval" : 1
+              },
+              "event-callbacks" : {
+                  "*" : {
+                    "method" : "POST",
+                    "url" : "/services/bright",
+                    "params": [ "brilho" ]
+                  }
+              }
+            }
+        ]
+    }
+  }
+}
