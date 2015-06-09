@@ -1,2 +1,3 @@
 <input id="{{control.id}}" type="number" class="form-control"
-    placeholder="" ng-model="appliance.appliance_status[control['bind-status']]"/>
+    placeholder="" ng-model="appliance.view_status[control['bind-status']]"
+    ng-change="applianceService.onChangeControl(appliance, control);"/>

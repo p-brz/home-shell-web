@@ -47,7 +47,7 @@ app.controller('RoomsController', function($scope, $http) {
     };
 });
 
-app.controller('IndexAppliancesController', function($scope, $http) {
+app.controller('IndexAppliancesController', function($scope, $http, CloneService) {
     $scope.log = function(msg){console.log(msg);};
 
     $scope.appliances = [];
@@ -57,8 +57,6 @@ app.controller('IndexAppliancesController', function($scope, $http) {
     $scope.uiSchemes = [];
     //Appliance q está selecionada
     $scope.currentAppliance = null;
-
-    $scope.example_control = null;
 
 
     $scope.setup = function(){
@@ -75,12 +73,16 @@ app.controller('IndexAppliancesController', function($scope, $http) {
             console.log(appliance.status.ligada);
             $scope.appliancesById[applianceId] = {
                 name: appliance.name,
-                appliance_status : appliance.status,
+                type : appliance.type,
+                package : appliance.package,
+
+                view_status : CloneService.cloneObject(appliance.status),
+                real_status : CloneService.cloneObject(appliance.status),
+
+                //Deprecated
                 realstatus: appliance.status.ligada,
                 status: $scope.lampStatus(appliance.status.ligada),
-                viewStatus : appliance.status.ligada == 1,
-                type : appliance.type,
-                package : appliance.package
+                viewStatus : appliance.status.ligada == 1
             };
         }
 
@@ -127,11 +129,6 @@ app.controller('IndexAppliancesController', function($scope, $http) {
         $http(req)
         .success(function(data, status) {
             $scope.uiSchemes = data.schemes;
-
-            scheme = data.schemes["com.homeshell.lamp.defaultlamp"];
-            console.log("scheme example: ", scheme);
-            $scope.example_control = scheme.controls[0];
-            console.log("example control: ", $scope.example_control);
         })
         .error(function(data, status) {
             console.log("Failed to get schemes", status);
@@ -211,9 +208,6 @@ app.controller('IndexAppliancesController', function($scope, $http) {
         });
     }
 
-    $scope.jsonStringify = function(object){
-        return JSON.stringify(object);
-    }
     $scope.setCurrentAppliance = function(applianceId){
         $scope.currentAppliance = $scope.appliancesById[applianceId];
     }
@@ -230,57 +224,63 @@ app.directive('applianceDetail', [function ($compile) {
    };
  }]);
 
-app.directive('applianceControl', function ($compile,  $templateRequest) {
-    this.templates = {
-      "toggle"      : "control-toggle-template.html",
-      "range"       : "control-range-template.html",
-      "enumeration" : "control-enumeration-template.html",
-      "digit"       : "control-digit-template.html",
-      "action"      : "control-action-template.html",
-    };
+app.directive('applianceControl', ["$compile", "$templateRequest", "ApplianceService",
+  function ($compile,  $templateRequest, applianceService) {
+      this.templates = {
+        "toggle"      : "control-toggle-template.html",
+        "range"       : "control-range-template.html",
+        "enumeration" : "control-enumeration-template.html",
+        "digit"       : "control-digit-template.html",
+        "action"      : "control-action-template.html",
+      };
 
-    this.getTemplateUrlForControl = function(controlType){
-        if(templates[controlType]){
-          return "templates/" + templates[controlType];
-        }
-        return null;
-    }
+      this.getTemplateUrlForControl = function(controlType){
+          if(templates[controlType]){
+            return "templates/" + templates[controlType];
+          }
+          return null;
+      }
 
-    return {
-        restrict: 'E',
-        scope: {
-          appliance: '=',
-          control: '='
-        },
-        link: function(scope, element){
-            console.log("applianceControl directive. Control: '", scope.control,"'");
-            console.log("applianceControl directive. Appliance: '", scope.appliance,"'");
-            if(!scope.control){
-              return;
-            }
-            controlType = scope.control.type;
-            var templateUrl = getTemplateUrlForControl(controlType);
-            if(!templateUrl){
-                console.log("Could not render control of type '" + controlType + "'");
+      return {
+          restrict: 'E',
+          scope: {
+            appliance: '=',
+            control: '='
+          },
+          link: function(scope, element){
+              scope.applianceService = applianceService;
+
+              if(!scope.control){
                 return;
-            }
-            console.log("render control: ", scope.control, " with template: ", templateUrl);
-            $templateRequest(templateUrl).then(function(template) {
-               // template is the HTML template as a string
-               template =
-                    "<label for='toggle-power'> {{control.label}}</label>"
-                    + "<br/>"
-                    + template;
-               //Modifica element para que seu conteúdo seja o de template, então
-               //compila seu conteúdo aplicando o escopo atual
-               $compile(element.html(template).contents())(scope);
-            }, function() {
-               // An error has occurred here
-               console.log("failed to load template: ", templateUrl);
-            });
-        }
-   };
- });
+              }
+              controlType = scope.control.type;
+              var templateUrl = getTemplateUrlForControl(controlType);
+              if(!templateUrl){
+                  console.log("Could not render control of type '" + controlType + "'");
+                  return;
+              }
+              if(scope.control.type == "toggle"){
+                  bindStatus = scope.control['bind-status'];
+                  appliance = scope.appliance;
+                  appliance.view_status[bindStatus] = Boolean(appliance.real_status[bindStatus]);
+              }
+              $templateRequest(templateUrl).then(function(template) {
+                 // template is the HTML template as a string
+                 template =
+                      "<label for='toggle-power'> {{control.label}}</label>"
+                      + "<br/>"
+                      + template;
+                 //Modifica element para que seu conteúdo seja o de template, então
+                 //compila seu conteúdo aplicando o escopo atual
+                 $compile(element.html(template).contents())(scope);
+              }, function() {
+                 // An error has occurred here
+                 console.log("failed to load template: ", templateUrl);
+              });
+          }
+     };
+   }
+]);
 
  app.directive('selectpickerNg', function ($timeout) {
  return {
@@ -293,4 +293,208 @@ app.directive('applianceControl', function ($compile,  $templateRequest) {
         });
      }
  }
+ });
+
+app.directive('controlToggle', function ($timeout) {
+return {
+    restrict: 'A',
+    require: 'ngModel',
+    link: function(scope, element, attrs, ngModel){
+      //Timeout espera até elemento estar renderizado (http://stackoverflow.com/a/22541080)
+       $timeout(function(){
+           //Ativa selectpicker neste elemento
+           $(element).bootstrapSwitch()
+       });
+       //ngModel.$parsers.push(function(v){
+      //  return v ? scope.$eval(attrs.cdTrueValue) : scope.$eval(attrs.cdFalseValue);
+      //});
+       //format text going to user (model to view)
+       /*ngModel.$formatters.push(function(value) {
+         trueValue = scope.$eval(attrs.trueValue);
+         falseValue = scope.$eval(attrs.falseValue);
+         console.log("(model to view) true value: " + trueValue + " with type: " + typeof(trueValue));
+         console.log("(model to view) false value: " + falseValue + " with type: " + typeof(falseValue));
+         console.log("(model to view) model value: " + value);
+         return (value == trueValue);
+       });
+
+       element.on('switchChange.bootstrapSwitch', function (e) {
+          // $setViewValue --> $viewValue --> $parsers --> $modelValue
+          console.log(e.target.checked);
+          ngModel.$setViewValue(e.target.checked);
+        });
+       //format text from the user (view to model)
+       ngModel.$parsers.push(function(value) {
+         console.log("(view to model) view value: " + value);
+
+         return value ? scope.$eval(attrs.trueValue) : scope.$eval(attrs.falseValue);
+       });*/
+
+      var convertModelToView = function(value){
+         return scope.$eval(attrs.trueValue) == value;
+      }
+      var convertViewToModel = function(value){
+        return value ? scope.$eval(attrs.trueValue) : scope.$eval(attrs.falseValue);
+      }
+
+       var getBooleanFromStringDefTrue = function(value) {
+          return (value === true || value === 'true' || !value);
+        };
+
+        function modelValue() {
+            return ngModel.$modelValue;
+        }
+       /**
+         * Listen to model changes.
+         */
+        var listenToModel = function () {
+          // When the model changes
+          scope.$watch(ngModel.$modelValue, function(newValue) {
+            console.log("model changed to: ", newValue);
+            element.bootstrapSwitch('state', convertModelToView(newValue), false);
+          }, true);
+        };
+        /**
+         * Listen to view changes.
+         */
+        var listenToView = function () {
+            // When the checkbox switch is clicked, set its value into the ngModel
+            element.on('switchChange.bootstrapSwitch', function (e) {
+              // $setViewValue --> $viewValue --> $parsers --> $modelValue
+              console.log("view changed to: ", e.target.checked);
+              ngModel.$setViewValue(convertViewToModel(e.target.checked));
+            });
+        };
+
+        listenToModel();
+        listenToView();
+    }
+}
+});
+
+
+
+app.factory("CloneService", function(){
+  return {
+    //
+    cloneObject : function (obj) {
+        if (null == obj || "object" != typeof obj) return obj;
+        var copy = obj.constructor();
+        for (var attr in obj) {
+            if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+        }
+        return copy;
+    }
+  };
+})
+
+ app.factory("ApplianceService", function($http, CloneService){
+     return {
+         serverAddress : 'http://localhost:8080',
+
+         onChangeControl : function(appliance, control){
+            console.log("onChangeControl ENTER");
+
+
+            statusToChange = control['bind-status'];
+            viewStatus = appliance.view_status[statusToChange];
+            realStatus = appliance.real_status[statusToChange];
+
+            console.log("view status: " + viewStatus + "; real status: " + realStatus);
+
+
+
+            if(this.needUpdate(appliance, control)){
+                this.requestApplianceUpdate(appliance, control);
+            }
+         },
+
+         requestApplianceUpdate : function(appliance, control){
+            console.log("requestApplianceUpdate ENTER");
+           var requestUrl = this.serverAddress + '/event/' + appliance.id;
+           var eventData = this.makeEvent(appliance, control);
+
+           console.log("POST " + requestUrl);
+           console.log("POST data: " + eventData);
+           var req = {
+               method: 'POST',
+               url: requestUrl,
+               data : eventData
+           }
+
+           $http(req)
+           .success(function(data, status) {
+               console.log(JSON.stringify(data));
+               if(data.status == 200){
+                   this.updateApplianceStatus(appliance, data);
+               }else{
+                   alert(data.message);
+               }
+           })
+           .error(function(data, status) {
+               console.log(status);
+               alert("Could not update appliance...");
+               appliance.view_status = CloneService.cloneObject(appliance.real_status);
+               if(control.type == "toggle"){
+                  statusToChange = control['bind-status'];
+                  var trueValue = control.params.hasOwnProperty('true-value')
+                                        ? control.params['true-value'] : true;
+                  appliance.view_status[statusToChange] =
+                          (appliance.real_status[statusToChange] == trueValue);
+               }
+           });
+         },
+
+         makeEvent : function(appliance, control){
+             statusToChange = control['bind-status'];
+             changedValue = appliance.view_status[statusToChange];
+
+             if(control.type == "toggle"){
+               var trueValue = control.params.hasOwnProperty('true-value')
+                                     ? control.params['true-value'] : true;
+               var falseValue = control.params.hasOwnProperty('false-value')
+                                     ? control.params['false-value'] : true;
+               changedValue = (viewStatus ? trueValue : falseValue);
+             }
+
+             callbackKey = "*";
+             if(control.type == "toggle"){
+                return changedValue ? "on" : "false";
+             }
+             return {
+                control_id : control.id,
+                value : changedValue,
+                callback_key: callbackKey,
+             }
+         },
+
+         needUpdate: function(appliance, control){
+            console.log("needUpdate ENTER");
+            if(control.type == "action"){
+                return true;
+            }
+            statusToChange = control['bind-status'];
+            viewStatus = appliance.view_status[statusToChange];
+            realStatus = appliance.real_status[statusToChange];
+
+            if(control.type == "toggle"){
+              var trueValue = control.params.hasOwnProperty('true-value')
+                                    ? control.params['true-value'] : true;
+              var falseValue = control.params.hasOwnProperty('false-value')
+                                    ? control.params['false-value'] : true;
+              viewStatus = (viewStatus ? trueValue : falseValue);
+            }
+            //<h6> False Value: {{control.params.hasOwnProperty('false-value')  ? control.params['false-value'] : false}}
+            console.log("view status: " + viewStatus + "; real status: " + realStatus);
+
+            return viewStatus != realStatus;
+         },
+
+         updateApplianceStatus: function(appliance, responseData){
+            if(responseData){
+                  appliance.view_status = CloneService.cloneObject(responseData.status);
+                  appliance.real_status = CloneService.cloneObject(responseData.status);
+            }
+         }
+     };
  });

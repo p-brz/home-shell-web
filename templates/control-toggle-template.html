@@ -1,3 +1,6 @@
+<h6> True Value: {{control.params.hasOwnProperty('true-value')  ? control.params['true-value'] : true}}</h6>
+<h6> False Value: {{control.params.hasOwnProperty('false-value')  ? control.params['false-value'] : false}}</h6>
+<h6> Current Value: {{appliance.view_status[control['bind-status']]}}</h6>
 <input
   bs-switch
   id="toggle-power"
@@ -6,9 +9,9 @@
   switch-label-width="0"
   switch-on-text="{{ control.params['on-label'] }}"
   switch-off-text="{{ control.params['off-label'] }}"
-  ng-model="appliance.appliance_status[control['bind-status']]",
+  ng-model="appliance.view_status[control['bind-status']]",
   ng-true-value="true",
   ng-false-value="false",
-  ng-change="console.log(appliance);"
+  ng-change="applianceService.onChangeControl(appliance, control);"
   >
   <!-- ng-change="toggleStatus(appliancesById[appliance.id].viewStatus ? 1 : 0, appliance.id);" !-->

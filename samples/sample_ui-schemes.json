@@ -10,7 +10,9 @@
               "bind-status" : "ligada",
               "params" : {
                   "on-label" : "On",
-                  "off-label" : "Off"
+                  "off-label" : "Off",
+                  "true-value" : 1,
+                  "false-value" : 0
               },
               "event-callbacks" : {
                   "on" : {
@@ -54,7 +56,9 @@
               "bind-status" : "aberta",
               "params" : {
                   "on-label" : "Aberta",
-                  "off-label" : "Fechada"
+                  "off-label" : "Fechada",
+                  "true-value" : true,
+                  "false-value" : false
               },
               "event-callbacks" : {
                   "on" : {
@@ -90,7 +94,7 @@
         ]
     },
     "com.homeshell.fan" : {
-        "icon" : "cpu_fan_64x64.png",
+        "icon" : "BlackFan_64x64.png",
         "controls" : [
             {
                 "id" : "velocity",

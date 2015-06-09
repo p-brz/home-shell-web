@@ -29,7 +29,7 @@
                 ],
                 "status": {
                     "brilho": 100,
-                    "ligada": 1
+                    "ligada": 0
                 },
                 "type": "defaultlamp"
             },
@@ -61,7 +61,7 @@
                     }
                 ],
                 "status": {
-                    "aberta": false,
+                    "aberta": true,
                     "trancada": false
                 }
             },
