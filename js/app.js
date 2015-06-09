@@ -24,7 +24,7 @@ app.controller('RoomsController', function($scope, $http) {
     $scope.rooms = [];
     $scope.loading = true;
     $scope.getItems = function() {
-        var serverUrl = 'http://localhost:8080';
+        var serverUrl = 'http://192.168.0.3:8080';
         //var serverUrl = 'http://10.5.28.194:8080';
         var req = {
             method: 'GET',
@@ -93,9 +93,11 @@ app.controller('IndexAppliancesController', function($scope, $http, CloneService
     }
 
     $scope.getItems = function() {
+        var serverUrl = "http://192.168.0.3:8080";
         var req = {
             method: 'GET',
-            url: 'samples/sample_appliances_a.json',
+            //url: '/samples/sample_appliances_a.json',
+            url: serverUrl + '/appliances/',
             headers: {
                 'Access-Control-Allow-Origin': '*'
             }
@@ -117,7 +119,7 @@ app.controller('IndexAppliancesController', function($scope, $http, CloneService
 
     $scope.getSchemes = function(appliances) {
         $scope.loading = true;
-        var serverUrl = 'http://localhost:8080';
+        var serverUrl = 'http://192.168.0.3:8080';
         //var serverUrl = 'http://10.5.28.194:8080';
         var req = {
             method: 'GET',
@@ -131,7 +133,6 @@ app.controller('IndexAppliancesController', function($scope, $http, CloneService
         .success(function(data, status) {
             $scope.uiSchemes = data.contents.schemes;
 
-            console.log("scheme example: ", scheme);
             $scope.appliances = appliances;
             $scope.processAppliances();
             $scope.loading = false;
@@ -190,7 +191,7 @@ app.controller('IndexAppliancesController', function($scope, $http, CloneService
             oppositeService = 'ligar';
         }
 
-        var serverUrl = 'http://localhost:8080';
+        var serverUrl = 'http://192.168.0.3:8080';
         //var serverUrl = 'http://10.5.28.194:8080';
         var serviceurl = serverUrl + '/appliances/' + lampId + '/services/' + oppositeService + '/';
         console.log(serviceurl);
@@ -398,7 +399,7 @@ app.factory("CloneService", function(){
 
  app.factory("ApplianceService", function($http, CloneService){
 
-     var serverUrl = 'http://localhost:8080';
+     var serverUrl = 'http://192.168.0.3:8080';
      //var serverUrl = 'http://10.5.28.194:8080';
      return {
          serverAddress : serverUrl,
@@ -498,7 +499,8 @@ app.factory("CloneService", function(){
             //<h6> False Value: {{control.params.hasOwnProperty('false-value')  ? control.params['false-value'] : false}}
             console.log("view status: " + viewStatus + "; real status: " + realStatus);
 
-            return viewStatus != realStatus;
+            
+            return true;//viewStatus != realStatus;
          },
 
          updateApplianceStatus: function(appliance, responseData){
