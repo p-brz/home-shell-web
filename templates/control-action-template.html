@@ -1,1 +1,4 @@
-<button class="btn btn-primary"> {{control.params.label}} </button>
+<button class="btn btn-primary"
+    ng-click="applianceService.onChangeControl(appliance, control);">
+    {{control.params.label}}
+</button>

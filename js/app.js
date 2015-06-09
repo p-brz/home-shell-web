@@ -28,8 +28,8 @@ app.controller('RoomsController', function($scope, $http) {
         //var serverUrl = 'http://10.5.28.194:8080';
         var req = {
             method: 'GET',
-            //url: 'samples/sample_groups.json',
-            url: serverUrl + '/groups/',
+            url: 'samples/sample_groups.json',
+            //url: serverUrl + '/groups/',
             headers: {
                 'Access-Control-Allow-Origin': '*'
             }
@@ -74,6 +74,7 @@ app.controller('IndexAppliancesController', function($scope, $http, CloneService
             var applianceId = appliance.id;
             console.log(appliance.status.ligada);
             $scope.appliancesById[applianceId] = {
+                id : appliance.id,
                 name: appliance.name,
                 type : appliance.type,
                 package : appliance.package,
@@ -93,11 +94,12 @@ app.controller('IndexAppliancesController', function($scope, $http, CloneService
     }
 
     $scope.getItems = function() {
+        console.log("get items");
         var serverUrl = "http://192.168.0.3:8080";
         var req = {
             method: 'GET',
-            //url: '/samples/sample_appliances_a.json',
-            url: serverUrl + '/appliances/',
+            url: 'samples/sample_appliances_a.json',
+            //url: serverUrl + '/appliances/',
             headers: {
                 'Access-Control-Allow-Origin': '*'
             }
@@ -106,13 +108,14 @@ app.controller('IndexAppliancesController', function($scope, $http, CloneService
         $http(req)
         .success(function(data, status) {
             console.log('SUCCESS');
+            console.log(data.contents);
             // $scope.appliances = data.contents.appliances;
             $scope.getSchemes(data.contents.appliances);
             // $scope.processAppliances();
         })
         .error(function(data, status) {
             console.log(status);
-            alert("Could not retrieve data from server");
+            alert("Could not retrieve data from server when trying to get appliances");
         });
     };
 
@@ -123,7 +126,8 @@ app.controller('IndexAppliancesController', function($scope, $http, CloneService
         //var serverUrl = 'http://10.5.28.194:8080';
         var req = {
             method: 'GET',
-            url: serverUrl + '/appliances/schemes/',
+            //url: serverUrl + '/appliances/schemes/',
+            url: 'samples/sample_ui-schemes.json',
             headers: {
                 'Access-Control-Allow-Origin': '*'
             }
@@ -179,42 +183,6 @@ app.controller('IndexAppliancesController', function($scope, $http, CloneService
         console.log('Data: ' + lampData.status.ligada);
         $scope.appliancesById[lampId].status = $scope.lampStatus(lampData.status.ligada);
         $scope.appliancesById[lampId].realstatus = lampData.status.ligada;
-    }
-
-    $scope.toggleStatus = function(status, lampId){
-        console.log('ToggleStatus: ' + status);
-
-        var oppositeService = '';
-        if(status == 1){
-            oppositeService = 'desligar';
-        }else{
-            oppositeService = 'ligar';
-        }
-
-        var serverUrl = 'http://192.168.0.3:8080';
-        //var serverUrl = 'http://10.5.28.194:8080';
-        var serviceurl = serverUrl + '/appliances/' + lampId + '/services/' + oppositeService + '/';
-        console.log(serviceurl);
-        var req = {
-            method: 'POST',
-            url: serviceurl
-        }
-
-        $http(req)
-        .success(function(data, status) {
-            console.log(JSON.stringify(data));
-            if(data.status == 200){
-                $scope.updateAppliance(lampId, data.contents.appliance);
-            }else{
-                alert(data.message);
-            }
-        })
-        .error(function(data, status) {
-            console.log(status);
-            alert("Could not update appliance...");
-            realStatus = $scope.appliancesById[lampId].realstatus;
-            $scope.appliancesById[lampId].viewStatus = (realStatus == 1);
-        });
     }
 
     $scope.setCurrentAppliance = function(applianceId){
@@ -294,15 +262,43 @@ app.directive('applianceControl', ["$compile", "$templateRequest", "ApplianceSer
  app.directive('selectpickerNg', function ($timeout) {
  return {
      restrict: 'A',
-     link: function(scope, element, attrs){
+     require: 'ngModel',
+     link: function(scope, element, attrs, ngModel){
        //Timeout espera até elemento estar renderizado (http://stackoverflow.com/a/22541080)
         $timeout(function(){
           //Ativa selectpicker neste elemento
           $(element).selectpicker()
         });
+        //model to view
+        ngModel.$formatters.push(function(val) {
+          $timeout(function(){
+              $(element).selectpicker('render');
+          });
+          //$(element).selectpicker('val', 'Mustard');
+          return val;
+        });
      }
  }
  });
+
+app.directive('selectcontrolConverter', function ($timeout) {
+return {
+    restrict: 'A',
+    require: 'ngModel',
+    link: function(scope, element, attrs, ngModel) {
+      //view to model
+      ngModel.$parsers.push(function(val) {
+        console.log("selectcontrol - value from view:" + val);
+        return val;
+      });
+      //model to view
+      ngModel.$formatters.push(function(val) {
+        console.log("selectcontrol - value from model:" + val);
+        return val;
+      });
+    }
+}
+});
 
 app.directive('controlToggle', function ($timeout) {
 return {
@@ -431,7 +427,8 @@ app.factory("CloneService", function(){
            var req = {
                method: 'POST',
                url: requestUrl,
-               data : eventData
+               data : eventData,
+               timeout : 5000
            }
 
            $http(req)
@@ -445,8 +442,11 @@ app.factory("CloneService", function(){
            })
            .error(function(data, status) {
                console.log(status);
-               alert("Could not update appliance...");
+               console.log("real status: " + appliance.real_status[control['bind-status']]
+                          + " view status: " + appliance.view_status[control['bind-status']]);
                appliance.view_status = CloneService.cloneObject(appliance.real_status);
+               console.log("real status: " + appliance.real_status[control['bind-status']]
+                          + " view status: " + appliance.view_status[control['bind-status']]);
                if(control.type == "toggle"){
                   statusToChange = control['bind-status'];
                   var trueValue = control.params.hasOwnProperty('true-value')
@@ -454,6 +454,8 @@ app.factory("CloneService", function(){
                   appliance.view_status[statusToChange] =
                           (appliance.real_status[statusToChange] == trueValue);
                }
+
+               alert("Could not update appliance...");
            });
          },
 
@@ -471,13 +473,18 @@ app.factory("CloneService", function(){
 
              callbackKey = "*";
              if(control.type == "toggle"){
-                return changedValue ? "on" : "false";
+                return changedValue ? "on" : "off";
              }
-             return {
+             eventData = {
                 control_id : control.id,
-                value : changedValue,
-                callback_key: callbackKey,
+                callback_key: callbackKey
              }
+
+             if(typeof(changedValue) !== "undefined"){
+                eventData.value = changedValue;
+             }
+
+             return eventData;
          },
 
          needUpdate: function(appliance, control){
@@ -488,19 +495,21 @@ app.factory("CloneService", function(){
             statusToChange = control['bind-status'];
             viewStatus = appliance.view_status[statusToChange];
             realStatus = appliance.real_status[statusToChange];
-
+            console.log("view status: " + viewStatus + "; real status: " + realStatus);
             if(control.type == "toggle"){
+              console.log("control type == toggle");
               var trueValue = control.params.hasOwnProperty('true-value')
                                     ? control.params['true-value'] : true;
               var falseValue = control.params.hasOwnProperty('false-value')
-                                    ? control.params['false-value'] : true;
-              viewStatus = (viewStatus ? trueValue : falseValue);
+                                    ? control.params['false-value'] : false;
+
+              viewStatus = (viewStatus === true || viewStatus === "true"? trueValue : falseValue);
             }
             //<h6> False Value: {{control.params.hasOwnProperty('false-value')  ? control.params['false-value'] : false}}
             console.log("view status: " + viewStatus + "; real status: " + realStatus);
-
-            
-            return true;//viewStatus != realStatus;
+            console.log(": " + viewStatus + " !== " + realStatus + " ? " + (viewStatus !== realStatus));
+            console.log("ABC");
+            return viewStatus !== realStatus;
          },
 
          updateApplianceStatus: function(appliance, responseData){

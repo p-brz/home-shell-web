@@ -4,7 +4,7 @@
             {
                 "id": 1,
                 "name": "Dinner Room Lamp",
-                "package": "com.homeshell.lamp",
+                "package": "com.homeshell",
                 "services": [
                     {
                         "id": 1,
@@ -116,7 +116,7 @@
             {
                 "id": 4,
                 "name": "Shelter Lamp",
-                "package": "com.homeshell.lamp",
+                "package": "com.homeshell",
                 "services": [
                     {
                         "id": 1,

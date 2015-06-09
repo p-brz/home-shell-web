@@ -1,5 +1,6 @@
 <select class="selectpicker"
         ng-model="appliance.view_status[control['bind-status']]"
+        ng-change="applianceService.onChangeControl(appliance, control);"
         selectpicker-ng>
   <option value="{{value.id}}" ng-repeat="value in control.params.values">
     {{value.label}}

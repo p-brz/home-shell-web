@@ -1,3 +1,4 @@
 <input id="{{control.id}}" type="number" class="form-control"
     placeholder="" ng-model="appliance.view_status[control['bind-status']]"
+    ng-model-options="{ debounce: 300 }"
     ng-change="applianceService.onChangeControl(appliance, control);"/>
