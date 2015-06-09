@@ -63,7 +63,7 @@ app.controller('IndexAppliancesController', function($scope, $http) {
 
     $scope.setup = function(){
         $scope.getItems();
-        $scope.getSchemes();
+        // $scope.getSchemes();
     }
 
     $scope.processAppliances = function(){
@@ -91,8 +91,6 @@ app.controller('IndexAppliancesController', function($scope, $http) {
     $scope.getItems = function() {
         var req = {
             method: 'GET',
-            // url: 'http://localhost:8080/appliances/',
-            // url: 'http://localhost/academico/hs-samples/sample_appliances_a.json',
             url: 'samples/sample_appliances_a.json',
             headers: {
                 'Access-Control-Allow-Origin': '*'
@@ -102,9 +100,9 @@ app.controller('IndexAppliancesController', function($scope, $http) {
         $http(req)
         .success(function(data, status) {
             console.log('SUCCESS');
-            $scope.appliances = data.contents.appliances;
-            $scope.processAppliances();
-            $scope.loading = false;
+            // $scope.appliances = data.contents.appliances;
+            $scope.getSchemes(data.contents.appliances);
+            // $scope.processAppliances();
         })
         .error(function(data, status) {
             console.log(status);
@@ -113,12 +111,11 @@ app.controller('IndexAppliancesController', function($scope, $http) {
     };
 
 
-    $scope.getSchemes = function() {
+    $scope.getSchemes = function(appliances) {
+        $scope.loading = true;
         var req = {
             method: 'GET',
-            // url: 'http://localhost:8080/appliances/',
-            // url: 'http://localhost/academico/hs-samples/sample_appliances_a.json',
-            url: 'samples/sample_ui-schemes.json',
+            url: 'http://localhost:8080/appliances/schemes/',
             headers: {
                 'Access-Control-Allow-Origin': '*'
             }
@@ -126,11 +123,14 @@ app.controller('IndexAppliancesController', function($scope, $http) {
 
         $http(req)
         .success(function(data, status) {
-            $scope.uiSchemes = data.schemes;
+            $scope.uiSchemes = data.contents.schemes;
 
-            scheme = data.schemes["com.homeshell.lamp.defaultlamp"];
+            scheme = data.contents.schemes["com.homeshell.lamp.defaultlamp"];
             console.log("scheme example: ", scheme);
+            $scope.appliances = appliances;
             $scope.example_control = scheme.controls[0];
+            $scope.processAppliances();
+            $scope.loading = false;
             console.log("example control: ", $scope.example_control);
         })
         .error(function(data, status) {
