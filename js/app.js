@@ -24,10 +24,12 @@ app.controller('RoomsController', function($scope, $http) {
     $scope.rooms = [];
     $scope.loading = true;
     $scope.getItems = function() {
+        var serverUrl = 'http://localhost:8080';
+        //var serverUrl = 'http://10.5.28.194:8080';
         var req = {
             method: 'GET',
-            //url: 'http://localhost:8080/groups/',
-            url: 'samples/sample_groups.json',
+            //url: 'samples/sample_groups.json',
+            url: serverUrl + '/groups/',
             headers: {
                 'Access-Control-Allow-Origin': '*'
             }
@@ -61,7 +63,7 @@ app.controller('IndexAppliancesController', function($scope, $http, CloneService
 
     $scope.setup = function(){
         $scope.getItems();
-        $scope.getSchemes();
+        // $scope.getSchemes();
     }
 
     $scope.processAppliances = function(){
@@ -93,8 +95,6 @@ app.controller('IndexAppliancesController', function($scope, $http, CloneService
     $scope.getItems = function() {
         var req = {
             method: 'GET',
-            // url: 'http://localhost:8080/appliances/',
-            // url: 'http://localhost/academico/hs-samples/sample_appliances_a.json',
             url: 'samples/sample_appliances_a.json',
             headers: {
                 'Access-Control-Allow-Origin': '*'
@@ -104,9 +104,9 @@ app.controller('IndexAppliancesController', function($scope, $http, CloneService
         $http(req)
         .success(function(data, status) {
             console.log('SUCCESS');
-            $scope.appliances = data.contents.appliances;
-            $scope.processAppliances();
-            $scope.loading = false;
+            // $scope.appliances = data.contents.appliances;
+            $scope.getSchemes(data.contents.appliances);
+            // $scope.processAppliances();
         })
         .error(function(data, status) {
             console.log(status);
@@ -115,12 +115,13 @@ app.controller('IndexAppliancesController', function($scope, $http, CloneService
     };
 
 
-    $scope.getSchemes = function() {
+    $scope.getSchemes = function(appliances) {
+        $scope.loading = true;
+        var serverUrl = 'http://localhost:8080';
+        //var serverUrl = 'http://10.5.28.194:8080';
         var req = {
             method: 'GET',
-            // url: 'http://localhost:8080/appliances/',
-            // url: 'http://localhost/academico/hs-samples/sample_appliances_a.json',
-            url: 'samples/sample_ui-schemes.json',
+            url: serverUrl + '/appliances/schemes/',
             headers: {
                 'Access-Control-Allow-Origin': '*'
             }
@@ -128,7 +129,12 @@ app.controller('IndexAppliancesController', function($scope, $http, CloneService
 
         $http(req)
         .success(function(data, status) {
-            $scope.uiSchemes = data.schemes;
+            $scope.uiSchemes = data.contents.schemes;
+
+            console.log("scheme example: ", scheme);
+            $scope.appliances = appliances;
+            $scope.processAppliances();
+            $scope.loading = false;
         })
         .error(function(data, status) {
             console.log("Failed to get schemes", status);
@@ -184,7 +190,9 @@ app.controller('IndexAppliancesController', function($scope, $http, CloneService
             oppositeService = 'ligar';
         }
 
-        var serviceurl = 'http://localhost:8080/appliances/' + lampId + '/services/' + oppositeService + '/';
+        var serverUrl = 'http://localhost:8080';
+        //var serverUrl = 'http://10.5.28.194:8080';
+        var serviceurl = serverUrl + '/appliances/' + lampId + '/services/' + oppositeService + '/';
         console.log(serviceurl);
         var req = {
             method: 'POST',
@@ -389,8 +397,11 @@ app.factory("CloneService", function(){
 })
 
  app.factory("ApplianceService", function($http, CloneService){
+
+     var serverUrl = 'http://localhost:8080';
+     //var serverUrl = 'http://10.5.28.194:8080';
      return {
-         serverAddress : 'http://localhost:8080',
+         serverAddress : serverUrl,
 
          onChangeControl : function(appliance, control){
             console.log("onChangeControl ENTER");
