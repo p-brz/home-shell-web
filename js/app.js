@@ -58,6 +58,9 @@ app.controller('IndexAppliancesController', function($scope, $http) {
     //Appliance q está selecionada
     $scope.currentAppliance = null;
 
+    $scope.example_control = null;
+
+
     $scope.setup = function(){
         $scope.getItems();
         $scope.getSchemes();
@@ -124,9 +127,11 @@ app.controller('IndexAppliancesController', function($scope, $http) {
         $http(req)
         .success(function(data, status) {
             $scope.uiSchemes = data.schemes;
-            for(name in $scope.uiSchemes){
-              console.log(name);
-            }
+
+            scheme = data.schemes["com.homeshell.lamp.defaultlamp"];
+            console.log("scheme example: ", scheme);
+            $scope.example_control = scheme.controls[0];
+            console.log("example control: ", $scope.example_control);
         })
         .error(function(data, status) {
             console.log("Failed to get schemes", status);
@@ -138,6 +143,21 @@ app.controller('IndexAppliancesController', function($scope, $http) {
         if(appliance){
             var schemeName = appliance.package + "." + appliance.type;
             return $scope.uiSchemes[schemeName];
+        }
+        return null;
+    }
+
+    $scope.getMainControl = function(appliance){
+        scheme = $scope.getScheme(appliance);
+        if(scheme && scheme.controls.length > 0){
+            for(control in scheme.controls){
+                if(control.mainControl){
+                    return control;
+                }
+            }
+
+            //Se não encontrou nenhum controle marcado como principal, utiliza o primeiro
+            return scheme.controls[0];
         }
         return null;
     }
@@ -233,14 +253,24 @@ app.directive('applianceControl', function ($compile,  $templateRequest) {
           control: '='
         },
         link: function(scope, element){
+            console.log("applianceControl directive. Control: '", scope.control,"'");
+            console.log("applianceControl directive. Appliance: '", scope.appliance,"'");
+            if(!scope.control){
+              return;
+            }
             controlType = scope.control.type;
             var templateUrl = getTemplateUrlForControl(controlType);
             if(!templateUrl){
                 console.log("Could not render control of type '" + controlType + "'");
                 return;
             }
+            console.log("render control: ", scope.control, " with template: ", templateUrl);
             $templateRequest(templateUrl).then(function(template) {
                // template is the HTML template as a string
+               template =
+                    "<label for='toggle-power'> {{control.label}}</label>"
+                    + "<br/>"
+                    + template;
                //Modifica element para que seu conteúdo seja o de template, então
                //compila seu conteúdo aplicando o escopo atual
                $compile(element.html(template).contents())(scope);

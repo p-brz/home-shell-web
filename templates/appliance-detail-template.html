@@ -12,9 +12,7 @@
       <div class="appliance-services">
 
           <div class="form-group" ng-repeat="control in scheme.controls">
-              <label for="toggle-power"> {{control.label}}</label>
-              <br/>
-              <appliance-control appliance="appliance" control="control"/>
+              <appliance-control appliance="appliance" control="control"></appliance-control>
           </div>
 
       </div>

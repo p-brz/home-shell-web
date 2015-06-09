@@ -48,27 +48,26 @@
                 <div class="row pull-right">
                   <button type="button" class="btn overflow-button"
                     data-toggle="modal" data-target="#myModal"
-                    ng-click="setCurrentAppliance(appliance.id);"
-                    data-appliance-id="{{appliance.id}}"
-                    data-appliance={{jsonStringify(appliance)}}>
+                    ng-click="setCurrentAppliance(appliance.id);">
                     <i class="fa fa-ellipsis-v fa-2x"></i>
                   </button>
                 </div>
 
                 <!-- Ícone da appliance !-->
-                <span class="li_bulb"></span>
+                <img class="appliance-icon" src="imgs/{{getScheme(appliance).icon}}"></img>
                 <h3>{{appliancesById[appliance.id].name}}</h3>
-                <div class="appliance-services">
-                    <input
-                      bs-switch
-                      type="checkbox"
-                      switch-size="small"
-                      switch-label-width="0"
 
-                      ng-model="appliancesById[appliance.id].viewStatus"
-                      ng-change="toggleStatus(appliancesById[appliance.id].viewStatus ? 1 : 0, appliance.id);"
-                      >
-                </div>
+                <!-- É preciso referenciar appliancesById e não appliance direto,
+                     pois elas (em algum momento) acabam por referenciar instâncias
+                     diferentes.
+                     ng-if é necessárias para que angular monitore o valor retornado
+                     por getMainControl e espere para renderizar appliance-control
+                     apenas qnd o controle existir. 
+                !-->
+                <appliance-control appliance="appliancesById[appliance.id]"
+                    control="getMainControl(appliancesById[appliance.id])"
+                    ng-if="getMainControl(appliancesById[appliance.id])">
+                </appliance-control>
             </div>
 
             <div class="appliance-box-extra appliance-services">
