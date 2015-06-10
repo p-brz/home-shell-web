@@ -1,3 +1,5 @@
+serverUrl = "http://localhost:8081"
+
 app = angular.module('homeshell', [
     'ngRoute'
     , 'frapontillo.bootstrap-switch' //angular-bootstrap-switch
@@ -25,12 +27,12 @@ app.controller('RoomsController', function($scope, $http) {
     $scope.rooms = [];
     $scope.loading = true;
     $scope.getItems = function() {
-        var serverUrl = 'http://192.168.0.3:8080';
+        //var serverUrl = 'http://192.168.0.3:8080';
         //var serverUrl = 'http://10.5.28.194:8080';
         var req = {
             method: 'GET',
-            url: 'samples/sample_groups.json',
-            //url: serverUrl + '/groups/',
+            //url: 'samples/sample_groups.json',
+            url: serverUrl + '/groups/',
             headers: {
                 'Access-Control-Allow-Origin': '*'
             }
@@ -96,11 +98,11 @@ app.controller('IndexAppliancesController', function($scope, $http, CloneService
 
     $scope.getItems = function() {
         console.log("get items");
-        var serverUrl = "http://192.168.0.3:8080";
+        //var serverUrl = "http://192.168.0.3:8080";
         var req = {
             method: 'GET',
-            url: 'samples/sample_appliances_a.json',
-            //url: serverUrl + '/appliances/',
+            //url: 'samples/sample_appliances_a.json',
+            url: serverUrl + '/appliances/',
             headers: {
                 'Access-Control-Allow-Origin': '*'
             }
@@ -123,12 +125,12 @@ app.controller('IndexAppliancesController', function($scope, $http, CloneService
 
     $scope.getSchemes = function(appliances) {
         $scope.loading = true;
-        var serverUrl = 'http://192.168.0.3:8080';
+        //var serverUrl = 'http://192.168.0.3:8080';
         //var serverUrl = 'http://10.5.28.194:8080';
         var req = {
             method: 'GET',
-            //url: serverUrl + '/appliances/schemes/',
-            url: 'samples/sample_ui-schemes.json',
+            url: serverUrl + '/schemes/',
+            //url: 'samples/sample_ui-schemes.json',
             headers: {
                 'Access-Control-Allow-Origin': '*'
             }
@@ -237,11 +239,11 @@ app.directive('applianceControl', ["$compile", "$templateRequest", "ApplianceSer
                   console.log("Could not render control of type '" + controlType + "'");
                   return;
               }
-              if(scope.control.type == "toggle"){
-                  bindStatus = scope.control['bind-status'];
-                  appliance = scope.appliance;
-                  appliance.view_status[bindStatus] = Boolean(appliance.real_status[bindStatus]);
-              }
+              //if(scope.control.type == "toggle"){
+              //    bindStatus = scope.control['bind-status'];
+              //    appliance = scope.appliance;
+              //    appliance.view_status[bindStatus] = Boolean(appliance.real_status[bindStatus]);
+              //}
               $templateRequest(templateUrl).then(function(template) {
                  // template is the HTML template as a string
                  template =
@@ -301,40 +303,55 @@ return {
 }
 });
 
-app.directive('controlToggle', function ($timeout) {
+app.directive('toggleControl', function ($timeout) {
 return {
     restrict: 'A',
     require: 'ngModel',
     link: function(scope, element, attrs, ngModel){
       //Timeout espera até elemento estar renderizado (http://stackoverflow.com/a/22541080)
        $timeout(function(){
-           //Ativa selectpicker neste elemento
-           $(element).bootstrapSwitch()
+          $(element).bootstrapSwitch();
+          // When the checkbox switch is clicked, set its value into the ngModel
+          element.on('switchChange.bootstrapSwitch', function (e) {
+             // $setViewValue --> $viewValue --> $parsers --> $modelValue
+             console.log("[toggleControl] change view");
+             ngModel.$setViewValue(e.target.checked);
+          });
        });
-       //ngModel.$parsers.push(function(v){
-      //  return v ? scope.$eval(attrs.cdTrueValue) : scope.$eval(attrs.cdFalseValue);
+
+      //format text going to user (model to view)
+      ngModel.$formatters.push(function(value) {
+          trueValue = scope.$eval(attrs.ngTrueValue);
+          console.log("[toggleControl] from model to view: " + value);
+          console.log("[toggleControl] true value: " + trueValue);
+          $timeout(function(){
+            $(element).bootstrapSwitch('state', value === trueValue);
+          });
+          return value;
+      });
+       /**
+
+       ngModel.$formatters.push(function(value) {
+         trueValue = scope.$eval(attrs.ngTrueValue);
+         falseValue = scope.$eval(attrs.ngFalseValue);
+         console.log("[toggleControl] from model to view: " + value);
+         console.log("[toggleControl] true value: " + trueValue);
+         var isTrueValue = (value === trueValue);
+         console.log("" + value + " == " + trueValue + "? " + isTrueValue);
+         return  isTrueValue ? true : false;
+       });
+       */
+       //element.on('switchChange.bootstrapSwitch', function (e) {
+       //    // $setViewValue --> $viewValue --> $parsers --> $modelValue
+      //    console.log(e.target.checked);
+      //    ngModel.$setViewValue(e.target.checked);
+      //  });
+      //format text from the user (view to model)
+      //ngModel.$parsers.push(function(value) {
+      //  console.log("[toggleControl] from view to model: " + value);
+      //  return value ? scope.$eval(attrs.trueValue) : scope.$eval(attrs.falseValue);
+      //  return value;
       //});
-       //format text going to user (model to view)
-       /*ngModel.$formatters.push(function(value) {
-         trueValue = scope.$eval(attrs.trueValue);
-         falseValue = scope.$eval(attrs.falseValue);
-         console.log("(model to view) true value: " + trueValue + " with type: " + typeof(trueValue));
-         console.log("(model to view) false value: " + falseValue + " with type: " + typeof(falseValue));
-         console.log("(model to view) model value: " + value);
-         return (value == trueValue);
-       });
-
-       element.on('switchChange.bootstrapSwitch', function (e) {
-          // $setViewValue --> $viewValue --> $parsers --> $modelValue
-          console.log(e.target.checked);
-          ngModel.$setViewValue(e.target.checked);
-        });
-       //format text from the user (view to model)
-       ngModel.$parsers.push(function(value) {
-         console.log("(view to model) view value: " + value);
-
-         return value ? scope.$eval(attrs.trueValue) : scope.$eval(attrs.falseValue);
-       });*/
 
       var convertModelToView = function(value){
          return scope.$eval(attrs.trueValue) == value;
@@ -342,38 +359,6 @@ return {
       var convertViewToModel = function(value){
         return value ? scope.$eval(attrs.trueValue) : scope.$eval(attrs.falseValue);
       }
-
-       var getBooleanFromStringDefTrue = function(value) {
-          return (value === true || value === 'true' || !value);
-        };
-
-        function modelValue() {
-            return ngModel.$modelValue;
-        }
-       /**
-         * Listen to model changes.
-         */
-        var listenToModel = function () {
-          // When the model changes
-          scope.$watch(ngModel.$modelValue, function(newValue) {
-            console.log("model changed to: ", newValue);
-            element.bootstrapSwitch('state', convertModelToView(newValue), false);
-          }, true);
-        };
-        /**
-         * Listen to view changes.
-         */
-        var listenToView = function () {
-            // When the checkbox switch is clicked, set its value into the ngModel
-            element.on('switchChange.bootstrapSwitch', function (e) {
-              // $setViewValue --> $viewValue --> $parsers --> $modelValue
-              console.log("view changed to: ", e.target.checked);
-              ngModel.$setViewValue(convertViewToModel(e.target.checked));
-            });
-        };
-
-        listenToModel();
-        listenToView();
     }
 }
 });
@@ -396,30 +381,18 @@ app.factory("CloneService", function(){
 
  app.factory("ApplianceService", function($http, CloneService){
 
-     var serverUrl = 'http://192.168.0.3:8080';
+     //var serverUrl = 'http://192.168.0.3:8080';
      //var serverUrl = 'http://10.5.28.194:8080';
      return {
          serverAddress : serverUrl,
 
          onChangeControl : function(appliance, control){
-            console.log("onChangeControl ENTER");
-
-
-            statusToChange = control['bind-status'];
-            viewStatus = appliance.view_status[statusToChange];
-            realStatus = appliance.real_status[statusToChange];
-
-            console.log("view status: " + viewStatus + "; real status: " + realStatus);
-
-
-
             if(this.needUpdate(appliance, control)){
                 this.requestApplianceUpdate(appliance, control);
             }
          },
 
          requestApplianceUpdate : function(appliance, control){
-            console.log("requestApplianceUpdate ENTER");
            var requestUrl = this.serverAddress + '/event/' + appliance.id;
            var eventData = this.makeEvent(appliance, control);
 
@@ -442,19 +415,14 @@ app.factory("CloneService", function(){
                }
            })
            .error(function(data, status) {
-               console.log(status);
-               console.log("real status: " + appliance.real_status[control['bind-status']]
-                          + " view status: " + appliance.view_status[control['bind-status']]);
                appliance.view_status = CloneService.cloneObject(appliance.real_status);
-               console.log("real status: " + appliance.real_status[control['bind-status']]
-                          + " view status: " + appliance.view_status[control['bind-status']]);
-               if(control.type == "toggle"){
-                  statusToChange = control['bind-status'];
-                  var trueValue = control.params.hasOwnProperty('true-value')
-                                        ? control.params['true-value'] : true;
-                  appliance.view_status[statusToChange] =
-                          (appliance.real_status[statusToChange] == trueValue);
-               }
+              //if(control.type == "toggle"){
+              //    statusToChange = control['bind-status'];
+              //    var trueValue = control.params.hasOwnProperty('true-value')
+              //                          ? control.params['true-value'] : true;
+              //    appliance.view_status[statusToChange] =
+              //            (appliance.real_status[statusToChange] == trueValue);
+              // }
 
                alert("Could not update appliance...");
            });
@@ -464,16 +432,18 @@ app.factory("CloneService", function(){
              statusToChange = control['bind-status'];
              changedValue = appliance.view_status[statusToChange];
 
-             if(control.type == "toggle"){
-               var trueValue = control.params.hasOwnProperty('true-value')
-                                     ? control.params['true-value'] : true;
-               var falseValue = control.params.hasOwnProperty('false-value')
-                                     ? control.params['false-value'] : true;
-               changedValue = (viewStatus ? trueValue : falseValue);
-             }
+            //if(control.type == "toggle"){
+            //   var trueValue = control.params.hasOwnProperty('true-value')
+            //                         ? control.params['true-value'] : true;
+            //   var falseValue = control.params.hasOwnProperty('false-value')
+            //                         ? control.params['false-value'] : true;
+            //   changedValue = (viewStatus ? trueValue : falseValue);
+            // }
 
              callbackKey = "*";
              if(control.type == "toggle"){
+               var trueValue = control.params.hasOwnProperty('true-value')
+             //                         ? control.params['true-value'] : true;
                 return changedValue ? "on" : "off";
              }
              eventData = {
@@ -497,15 +467,15 @@ app.factory("CloneService", function(){
             viewStatus = appliance.view_status[statusToChange];
             realStatus = appliance.real_status[statusToChange];
             console.log("view status: " + viewStatus + "; real status: " + realStatus);
-            if(control.type == "toggle"){
-              console.log("control type == toggle");
-              var trueValue = control.params.hasOwnProperty('true-value')
-                                    ? control.params['true-value'] : true;
-              var falseValue = control.params.hasOwnProperty('false-value')
-                                    ? control.params['false-value'] : false;
-
-              viewStatus = (viewStatus === true || viewStatus === "true"? trueValue : falseValue);
-            }
+            //if(control.type == "toggle"){
+            //  console.log("control type == toggle");
+            //  var trueValue = control.params.hasOwnProperty('true-value')
+            //                        ? control.params['true-value'] : true;
+            //  var falseValue = control.params.hasOwnProperty('false-value')
+            //                        ? control.params['false-value'] : false;
+            //
+            //  viewStatus = (viewStatus === true || viewStatus === "true"? trueValue : falseValue);
+            //}
             //<h6> False Value: {{control.params.hasOwnProperty('false-value')  ? control.params['false-value'] : false}}
             console.log("view status: " + viewStatus + "; real status: " + realStatus);
             console.log(": " + viewStatus + " !== " + realStatus + " ? " + (viewStatus !== realStatus));
