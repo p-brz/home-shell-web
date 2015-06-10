@@ -50,3 +50,14 @@ span.appliance-name{
 .break-word{
     word-wrap: break-word;
 }
+
+.slider-control .slider-track, .slider-control .slider-selection {
+    background : #BABABA;
+}
+
+.slider-control .slider-horizontal {
+    width : 100%;
+}
+.slider-control .slider-handle {
+    background : #989898;
+}

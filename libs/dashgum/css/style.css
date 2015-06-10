@@ -855,15 +855,15 @@ ul.top-menu > li > a:hover, ul.top-menu > li > a:focus {
 	border-bottom: 1px solid #ffffff;
 }
 
-.box0 p {
+.box0 .box-hide p {
 	text-align: center;
 	font-size: 12px;
 }
 
-.box0 p, .box0 .box-hide {
+.box0 .box-hide p, .box0 .box-hide {
     color: rgba(0,0,0,0.0);
 }
-.box0:hover p, .box0:hover .box-hide {
+.box0:hover .box-hide p, .box0:hover .box-hide {
 	color: #ff865c;
 }
 

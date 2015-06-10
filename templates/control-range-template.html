@@ -1,6 +1,20 @@
-<input type="range"
-  min="{{control.params.min}}"
-  max="{{control.params.max}}"
-  ng-model="appliance.view_status[control['bind-status']]"
-  ng-change="applianceService.onChangeControl(appliance, control);"
-  ng-model-options="{debounce:400}"/>
+<!-- <div>
+  <p class="text-center">{{appliance.view_status[control['bind-status']]}}</p>
+  <input type="range"
+    min="{{control.params.min}}"
+    max="{{control.params.max}}"
+    ng-model="appliance.view_status[control['bind-status']]"
+    ng-change="applianceService.onChangeControl(appliance, control);"
+    ng-model-options="{debounce:400}"/>
+</div> !-->
+
+<slider slider-id="tooltipSlider"
+          ng-model="appliance.view_status[control['bind-status']]"
+          ng-change="applianceService.onChangeControl(appliance, control);"
+          ng-model-options="{debounce:400}"
+          tooltip="'show'"
+          min="control.params.min"
+          max="control.params.max"
+          class="slider-control"
+           >
+</slider>

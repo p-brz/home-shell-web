@@ -1,6 +1,7 @@
 app = angular.module('homeshell', [
-    'ngRoute',
-    'frapontillo.bootstrap-switch' //angular-bootstrap-switch
+    'ngRoute'
+    , 'frapontillo.bootstrap-switch' //angular-bootstrap-switch
+    , 'ui.bootstrap-slider' //angular-bootstrap-slider
 ]);
 
 app.config(['$routeProvider',
