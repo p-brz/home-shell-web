@@ -16,6 +16,12 @@
     margin-bottom: -72px;
 }
 
+.appliance-box{
+    min-height: 222px;
+    text-align: center;
+    height: 100%;
+}
+
 .appliance-box > .appliance-box-extra{
     /*Ocultar extras de appliance por padrão*/
     display: none;
@@ -41,6 +47,8 @@ span.appliance-name{
 
 .mtbox{
     margin-top : 0px;
+    margin-left: 0px;
+    height: 100%;
 }
 
 .appliance-detail-main{
@@ -60,4 +68,50 @@ span.appliance-name{
 }
 .slider-control .slider-handle {
     background : #989898;
+}
+
+/* -- Alison rules :D -- */
+
+.black-bg{
+    background: #3970BA;
+    border-bottom: 1px solid #3970BA;
+}
+
+.tooltips{
+    color: #fff;
+    font-size: 24px !important;
+    margin-top: -4px;
+}
+
+ul.sidebar-menu li a.active, ul.sidebar-menu li a:hover, ul.sidebar-menu li a:focus{
+    background: #5BC0DE !important;
+}
+
+ul.top-menu > li > .logout{
+    /*
+    border: 1px solid #36AFD3 !important;
+    background: #5BC0DE !important;
+    */
+    display: none;
+}
+
+.site-footer{
+    display: none;
+}
+
+ul.top-menu > li > a:hover, ul.top-menu > li > a:focus{
+    /* Later */
+}
+
+.mt{
+    margin-left: 0px;
+}
+
+.appliance-title{
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 23px;
+    width: auto !important;
+    height: auto !important;
 }

@@ -31,50 +31,53 @@
 
 
 
-<div ng-controller="IndexAppliancesController as appliancesControl" ng-init="setup()">
+<div class="container" ng-controller="IndexAppliancesController as appliancesControl" ng-init="setup()">
     <div class="row" ng-if="loading">
         <div class="col-md-2 col-md-offset-3">
             <img class="img-responsive text-center" src="img/loading.gif" alt="Loading data" />
         </div>
     </div>
 
-    <div class="row mtbox">
-        <div id="{{appliancesById[appliance.id].name}}"
-            class="appliance-box col-md-2 col-sm-2 box0"
-            ng-repeat="appliance in appliances">
 
-            <div class="appliance-box-main box1">
-                <!-- Botão de overflow !-->
-                <div class="row pull-right">
-                  <button type="button" class="btn overflow-button"
-                    data-toggle="modal" data-target="#myModal"
-                    ng-click="setCurrentAppliance(appliance.id);">
-                    <i class="fa fa-ellipsis-v fa-2x"></i>
-                  </button>
+    <div class="row">
+        <div class="col-md-offset-1 col-md-11 mtbox">
+            <div id="{{appliancesById[appliance.id].name}}"
+                class="appliance-box col-md-2 col-sm-2 box0"
+                ng-repeat="appliance in appliances">
+                <div class="appliance-box-main box1">
+                    <!-- Botão de overflow !-->
+                    <div class="row pull-right">
+                      <button type="button" class="btn overflow-button"
+                        data-toggle="modal" data-target="#myModal"
+                        ng-click="setCurrentAppliance(appliance.id);">
+                        <i class="fa fa-ellipsis-v fa-2x"></i>
+                      </button>
+                    </div>
+
+                    <!-- Ícone da appliance !-->
+                    <img class="appliance-icon" src="imgs/{{getScheme(appliance).icon}}"></img>
+                    <p class="appliance-title">{{appliancesById[appliance.id].name}}</p>
+
+                    <!-- É preciso referenciar appliancesById e não appliance direto,
+                         pois elas (em algum momento) acabam por referenciar instâncias
+                         diferentes.
+                         ng-if é necessárias para que angular monitore o valor retornado
+                         por getMainControl e espere para renderizar appliance-control
+                         apenas qnd o controle existir.
+                    !-->
+                    <appliance-control appliance="appliancesById[appliance.id]"
+                        control="getMainControl(appliancesById[appliance.id])"
+                        ng-if="getMainControl(appliancesById[appliance.id])">
+                    </appliance-control>
                 </div>
 
-                <!-- Ícone da appliance !-->
-                <img class="appliance-icon" src="imgs/{{getScheme(appliance).icon}}"></img>
-                <h3>{{appliancesById[appliance.id].name}}</h3>
+                <div class="appliance-box-extra appliance-services">
 
-                <!-- É preciso referenciar appliancesById e não appliance direto,
-                     pois elas (em algum momento) acabam por referenciar instâncias
-                     diferentes.
-                     ng-if é necessárias para que angular monitore o valor retornado
-                     por getMainControl e espere para renderizar appliance-control
-                     apenas qnd o controle existir. 
-                !-->
-                <appliance-control appliance="appliancesById[appliance.id]"
-                    control="getMainControl(appliancesById[appliance.id])"
-                    ng-if="getMainControl(appliancesById[appliance.id])">
-                </appliance-control>
+                </div>
             </div>
+        </div><!-- /row mt -->
 
-            <div class="appliance-box-extra appliance-services">
-
-            </div>
-        </div>
-    </div><!-- /row mt -->
+    </div>
 
 
 
