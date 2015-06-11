@@ -42,7 +42,7 @@
     <div class="row">
         <div class="col-md-offset-1 col-md-11 mtbox">
             <div id="{{appliancesById[appliance.id].name}}"
-                class="appliance-box col-md-2 col-sm-4 box0"
+                class="appliance-box col-md-2 col-sm-6 box0"
                 ng-repeat="appliance in appliances">
                 <div class="appliance-box-main box1">
                     <!-- Botão de overflow !-->
@@ -69,10 +69,6 @@
                         control="getMainControl(appliancesById[appliance.id])"
                         ng-if="getMainControl(appliancesById[appliance.id])">
                     </appliance-control>
-                </div>
-
-                <div class="appliance-box-extra appliance-services">
-
                 </div>
             </div>
         </div><!-- /row mt -->

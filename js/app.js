@@ -1,5 +1,5 @@
 serverUrl = "http://localhost:8081"
-useSamples = false
+useSamples = true
 
 app = angular.module('homeshell', [
     'ngRoute'
