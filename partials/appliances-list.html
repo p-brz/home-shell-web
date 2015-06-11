@@ -42,7 +42,7 @@
     <div class="row">
         <div class="col-md-offset-1 col-md-11 mtbox">
             <div id="{{appliancesById[appliance.id].name}}"
-                class="appliance-box col-md-2 col-sm-2 box0"
+                class="appliance-box col-md-2 col-sm-4 box0"
                 ng-repeat="appliance in appliances">
                 <div class="appliance-box-main box1">
                     <!-- Botão de overflow !-->
@@ -56,7 +56,7 @@
 
                     <!-- Ícone da appliance !-->
                     <img class="appliance-icon" src="imgs/{{getScheme(appliance).icon}}"></img>
-                    <p class="appliance-title">{{appliancesById[appliance.id].name}}</p>
+                    <p class="appliance-title break-word">{{appliancesById[appliance.id].name}}</p>
 
                     <!-- É preciso referenciar appliancesById e não appliance direto,
                          pois elas (em algum momento) acabam por referenciar instâncias

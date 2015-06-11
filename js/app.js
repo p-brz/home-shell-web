@@ -1,4 +1,5 @@
 serverUrl = "http://localhost:8081"
+useSamples = false
 
 app = angular.module('homeshell', [
     'ngRoute'
@@ -31,8 +32,7 @@ app.controller('RoomsController', function($scope, $http) {
         //var serverUrl = 'http://10.5.28.194:8080';
         var req = {
             method: 'GET',
-            //url: 'samples/sample_groups.json',
-            url: serverUrl + '/groups/',
+            url: !useSamples ? serverUrl + '/groups/' : 'samples/sample_groups.json',
             headers: {
                 'Access-Control-Allow-Origin': '*'
             }
@@ -100,8 +100,7 @@ app.controller('IndexAppliancesController', function($scope, $http, CloneService
         console.log("get items");
         var req = {
             method: 'GET',
-            //url: 'samples/sample_appliances_a.json',
-            url: serverUrl + '/appliances/',
+            url: !useSamples ? serverUrl + '/appliances/' : 'samples/sample_appliances_a.json',
             headers: {
                 'Access-Control-Allow-Origin': '*'
             }
@@ -127,8 +126,7 @@ app.controller('IndexAppliancesController', function($scope, $http, CloneService
         //var serverUrl = 'http://10.5.28.194:8080';
         var req = {
             method: 'GET',
-            url: serverUrl + '/appliances/schemes/',
-            // url: 'samples/sample_ui-schemes.json',
+            url: !useSamples ? serverUrl + '/appliances/schemes/' : 'samples/sample_ui-schemes.json',
             headers: {
                 'Access-Control-Allow-Origin': '*'
             }
