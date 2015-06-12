@@ -14,6 +14,12 @@ function($routeProvider) {
         templateUrl: 'routes/main.html',
         controller: 'MainController'
     })
+    .when('/appliances', {
+        templateUrl: 'routes/appliances.html'
+    })
+    .when('/rooms', {
+        templateUrl: 'routes/rooms.html'
+    })
     .when('/login', {
         templateUrl: 'routes/login.html',
         controller: 'LoginController'
